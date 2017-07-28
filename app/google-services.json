@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "48855468913",
+    "firebase_url": "https://fieldit-53d64.firebaseio.com",
+    "project_id": "fieldit-53d64",
+    "storage_bucket": "fieldit-53d64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48855468913:android:3e476e80cd318759",
+        "android_client_info": {
+          "package_name": "com.example.dell.fieldit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48855468913-ojk8pqfkvu0rk7gmk09cholubb8ps5lk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dell.fieldit",
+            "certificate_hash": "b6ac102063d137cba26c5e383c55814501032af8"
+          }
+        },
+        {
+          "client_id": "48855468913-8sdcndoidhdl6bnkhq00lpmb6e5gpk3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6yTqG95qk38Hof6krHEG0LxPdFk5cROY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48855468913-8sdcndoidhdl6bnkhq00lpmb6e5gpk3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
