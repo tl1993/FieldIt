@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/add_field_button"
+          android:title="@string/btn_add_field"
+          android:icon="@android:drawable/ic_menu_add"
+          compat:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/refresh_button"
+        android:title="@string/btn_refresh_fields"
+        android:icon="@android:drawable/ic_menu_rotate"
+        compat:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/logout_button"
+          android:title="@string/btn_logout"
+          compat:showAsAction="ifRoom"/>
+
+</menu>
