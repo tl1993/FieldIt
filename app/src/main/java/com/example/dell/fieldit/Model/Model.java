@@ -18,11 +18,21 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class Model {
     private final static Model instance = new Model();
     ModelFirebase modelFirebase;
     ModelSql modelSql;
+    private  List<Field> data = new LinkedList<Field>();
     private List<Field> fieldsData = new LinkedList<Field>();
+
+    public List<Field> getAllFields() {
+        Field fd1 = new Field ("1", "Gal", "Grass", 31.771959, 35.217018, "cool field",true);
+        data.add(fd1);
+        Field fd2 = new Field("2", "Tomer", "Grass", 32.109333, 34.855499, "cool field",true);
+        data.add(fd2);
+        return data;
+    }
 
     private Model() {
 
@@ -33,7 +43,7 @@ public class Model {
         modelFirebase.handleDatabaseChanges();
 
         // Init local database model
-        modelSql = new ModelSql(MyApplication.getAppContext());
+        //modelSql = new ModelSql(MyApplication.getAppContext());
     }
 
     public static Model getInstance() {
@@ -45,75 +55,75 @@ public class Model {
         public void onCancel();
     }
 
-    public void getAllFieldsAsynch(final GetFieldsListener listener) {
-
-        if (CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
-
-
-            // Get the last update time
-            final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
-
-            // Get all fields records from Firebase that where updated since local last update time
-            modelFirebase.getAllFieldsAsynch(lastUpdateDate, new GetFieldsListener() {
-                @Override
-                public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
-
-                    // Check if there is fields that added/updated since local last update time
-                    if (fields != null && fields.size() > 0) {
-
-                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
-                        double recentUpdate = lastUpdateDate;
-
-                        // Loop over all these fields
-                        for (Field field : fields) {
-
-                            // Add the current field to the local database
-                            FieldSql.addField(modelSql.getWritableDB(), field);
-
-                            // Get the maximum last update time
-                            if (field.getLastUpdated() > recentUpdate) {
-                                recentUpdate = field.getLastUpdated();
-                            }
-                        }
-
-                        // Set the last update time as the maximum we find
-                        FieldSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
-                    }
-
-                    // Check if there is fields that deleted since local last update time
-                    if (fieldsToDelete != null && fieldsToDelete.size() > 0) {
-
-                        // Loop over all these fields
-                        for (Field fieldToDelete : fieldsToDelete) {
-
-                            // Remove field's image from the device
-                            removeImageFromDevice(fieldToDelete.getImageName());
-
-                            // Delete the field from the local database
-                            FieldSql.deleteField(modelSql.getWritableDB(), fieldToDelete.getId());
-                        }
-                    }
-
-                    // Return the complete field list (ordered by field name) to the caller
-                    List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
-                    listener.onResult(fieldsList, null);
-                }
-
-                @Override
-                public void onCancel() {
-
-                    // Call listener's onCancel method
-                    listener.onCancel();
-                }
-            });
-        }
-        else
-        {
-            // Return the complete field list (ordered by field name) to the caller
-            List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
-            listener.onResult(fieldsList, null);
-        }
-    }
+//    public void getAllFieldsAsynch(final GetFieldsListener listener) {
+//
+//        if (CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
+//
+//
+//            // Get the last update time
+//            final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
+//
+//            // Get all fields records from Firebase that where updated since local last update time
+//            modelFirebase.getAllFieldsAsynch(lastUpdateDate, new GetFieldsListener() {
+//                @Override
+//                public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
+//
+//                    // Check if there is fields that added/updated since local last update time
+//                    if (fields != null && fields.size() > 0) {
+//
+//                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
+//                        double recentUpdate = lastUpdateDate;
+//
+//                        // Loop over all these fields
+//                        for (Field field : fields) {
+//
+//                            // Add the current field to the local database
+//                            FieldSql.addField(modelSql.getWritableDB(), field);
+//
+//                            // Get the maximum last update time
+//                            if (field.getLastUpdated() > recentUpdate) {
+//                                recentUpdate = field.getLastUpdated();
+//                            }
+//                        }
+//
+//                        // Set the last update time as the maximum we find
+//                        FieldSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
+//                    }
+//
+//                    // Check if there is fields that deleted since local last update time
+//                    if (fieldsToDelete != null && fieldsToDelete.size() > 0) {
+//
+//                        // Loop over all these fields
+//                        for (Field fieldToDelete : fieldsToDelete) {
+//
+//                            // Remove field's image from the device
+//                            removeImageFromDevice(fieldToDelete.getImageName());
+//
+//                            // Delete the field from the local database
+//                            FieldSql.deleteField(modelSql.getWritableDB(), fieldToDelete.getId());
+//                        }
+//                    }
+//
+//                    // Return the complete field list (ordered by field name) to the caller
+//                    List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
+//                    listener.onResult(fieldsList, null);
+//                }
+//
+//                @Override
+//                public void onCancel() {
+//
+//                    // Call listener's onCancel method
+//                    listener.onCancel();
+//                }
+//            });
+//        }
+//        else
+//        {
+//            // Return the complete field list (ordered by field name) to the caller
+//            List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
+//            listener.onResult(fieldsList, null);
+//        }
+//    }
 
     public List<Field> refreshFieldsList() {
 
@@ -346,16 +356,16 @@ public class Model {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri contentUri = Uri.fromFile(imageFile);
         mediaScanIntent.setData(contentUri);
-        MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
+        //MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
     }
 
-    private void refreshGallery(){
-
-        // Refresh the gallery in order to remove deleted images from there
-        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
-                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
-                null, null);
-    }
+//    private void refreshGallery(){
+//
+//        // Refresh the gallery in order to remove deleted images from there
+//        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
+//                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
+//                null, null);
+//    }
 
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
@@ -404,7 +414,7 @@ public class Model {
             if (fdelete.delete()) {
 
                 // Refresh the gallery in order to remove deleted images from there
-                refreshGallery();
+               // refreshGallery();
             }
         }
     }

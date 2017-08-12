@@ -256,7 +256,7 @@ public class ModelFirebase {
                         if (!user.getUid().equals(field.getUserId())) {
 
                             // Set the icon of the refresh button to "updates"
-                            MainActivity.changeRefreshButtonIcon(true);
+                            //MainActivity.changeRefreshButtonIcon(true);
                         }
                     }
 
@@ -298,7 +298,7 @@ public class ModelFirebase {
                 if (!user.getUid().equals(field.getUserId())) {
 
                     // Set the icon of the refresh button to "updates"
-                    MainActivity.changeRefreshButtonIcon(true);
+                   // MainActivity.changeRefreshButtonIcon(true);
                 }
             }
 
