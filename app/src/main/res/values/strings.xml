@@ -20,6 +20,7 @@
 
     <!-- Field Details-->
     <string name="field_details_edit_button">Edit Field</string>
+    <string name="field_details_add_review">Add Review</string>
 
     <!-- New Field-->
     <string name="name">Name</string>
@@ -36,4 +37,7 @@
     <!-- Messages -->
     <string name="no_field_has_changed">You need to change at least one field</string>
     <string name="must_fill_all_fields">You must fill all the fields in the form</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
