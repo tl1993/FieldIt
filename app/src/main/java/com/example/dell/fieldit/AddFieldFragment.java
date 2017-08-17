@@ -1,6 +1,8 @@
 package com.example.dell.fieldit;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,6 +21,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.dell.fieldit.Model.Field;
+import com.example.dell.fieldit.Model.Model;
 
 import static android.R.attr.imeSubtypeLocale;
 import static android.R.attr.type;
@@ -33,6 +39,8 @@ public class AddFieldFragment extends Fragment {
     EditText descriptionEt;
     CheckBox isLightedCb;
     private ProgressBar progressBar;
+    Spinner spinner;
+    //ProgressBar progressBar;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -85,75 +93,69 @@ public class AddFieldFragment extends Fragment {
         setTypesDropDown(contentView);
 
         nameEt = (EditText) contentView.findViewById(R.id.new_field_name);
-        name = nameEt.getText().toString();
         isLightedCb = (CheckBox) contentView.findViewById(R.id.new_field_isLighted);
-        isLighted = isLightedCb.isChecked();
-        Spinner spinner = (Spinner) contentView.findViewById(R.id.new_field_types_spinner);
-        type = spinner.getSelectedItem().toString();
+        spinner = (Spinner) contentView.findViewById(R.id.new_field_types_spinner);
         longitudeEt = (EditText) contentView.findViewById(R.id.new_field_longitude);
-        longitude = longitudeEt.getText().toString();
         latitudeEt = (EditText) contentView.findViewById(R.id.new_field_latitude);
-        latitude = latitudeEt.getText().toString();
         descriptionEt = (EditText) contentView.findViewById(R.id.new_field_description);
-        description = descriptionEt.getText().toString();
 
         Button saveBtn = (Button) contentView.findViewById(R.id.new_field_save_button);
         Button cancelBtn = (Button) contentView.findViewById(R.id.new_field_cancel_button);
 
-//        saveBtn.setOnClickListener(new View.OnClickListener() {
-//            @TargetApi(Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("TAG","Btn Save click");
-//                Log.d("TAG",nameEt.getText().toString());
-//                Log.d("TAG",idEt.getText().toString());
-//                Log.d("TAG",phoneEt.getText().toString());
-//                Log.d("TAG",addressEt.getText().toString());
-//
-//                Student st = new Student();
-//                st.name = nameEt.getText().toString();
-//                st.id = idEt.getText().toString();
-//                st.phone = phoneEt.getText().toString();
-//                st.address = addressEt.getText().toString();
-//                st.checked = checkedCb.isChecked();
-//                st.imageUrl = "";
-//                st.birthDay = date.day;
-//                st.birthYear = date.year;
-//                st.birthMonth = date.month;
-//                st.birthMinute = time.minute;
-//                st.birthHour = time.hour;
-//
-//                Model.instace.addStudent(st);
-//                android.app.Fragment newFragment = AddFieldFragment.newInstance();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//                // Replace whatever is in the fragment_container view with this fragment,
-//                // and add the transaction to the back stack
-//                transaction.replace(R.id.main_container , newFragment);
-//                transaction.addToBackStack(null);
-//
-//                // Commit the transaction
-//                transaction.commit();
-//
-//            }
-//        });
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name;
+                String longitude;
+                String latitude;
+                String type;
+                String description;
+                Boolean isLighted;
 
-//        cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.Fragment newFragment = AddFieldFragment.newInstance();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//                // Replace whatever is in the fragment_container view with this fragment,
-//                // and add the transaction to the back stack
-//                transaction.replace(R.id.main_container , newFragment);
-//                transaction.addToBackStack(null);
-//
-//                // Commit the transaction
-//                transaction.commit();
-//            }
-//
-//        });
+                // Get the values of the view's fields
+                name = nameEt.getText().toString();
+                longitude = longitudeEt.getText().toString();
+                latitude = latitudeEt.getText().toString();
+                type = spinner.getSelectedItem().toString();
+                description = descriptionEt.getText().toString();
+                isLighted = isLightedCb.isChecked();
+
+                //TODO: CHECK IMAGE CHANGES
+
+                // Check validation of fields
+                if(!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
+                        && !type.trim().isEmpty() && !description.trim().isEmpty()) {
+
+                        Field newField = new Field(name,type,latitude,longitude,description,isLighted);
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        Model.getInstance().addField(newField,imageBitmap,new Model.AddFieldListener() {
+                            @Override
+                            public void onResult() {
+                                progressBar.setVisibility(View.GONE);
+                                showMessage(R.string.field_added_successfully);
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                showMessage(R.string.save_error);
+                            }
+                        });
+                } else {
+                    // Show relevant message
+                    showMessage(R.string.must_fill_all_fields);
+                }
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Model.getInstance().deleteField(fd);
+                showMessage(R.string.Action_canceled);
+                //showMessage(R.string.delete_error);
+            }
+        });
 
         return contentView;
     }
@@ -161,7 +163,7 @@ public class AddFieldFragment extends Fragment {
     private void setTypesDropDown( final View view) {
 
         // Populate values in the types spinner
-        Spinner spinner = (Spinner) view.findViewById(R.id.new_field_types_spinner);
+        spinner = (Spinner) view.findViewById(R.id.new_field_types_spinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -202,4 +204,14 @@ public class AddFieldFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
 //    }
+
+    private void showMessage(int messageCode) {
+        String message = getResources().getString(messageCode);
+        DialogFragment dialog = new AlertDialog();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        args.putBoolean("shouldExit",true);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "TAG");
+    }
 }

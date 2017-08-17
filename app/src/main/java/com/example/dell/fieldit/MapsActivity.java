@@ -50,7 +50,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -64,26 +63,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        List<Field> data = Model.getInstance().getAllFields();
+        Model.getInstance().getAllFieldsAsynch(new Model.GetFieldsListener() {
+            @Override
+            public void onResult(List<Field> fields, List<Field> tripsToDelete) {
+                List<Field> data = fields;
+                for(Field field : data) {
+                    LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
+                    Marker m = mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(field.getName())
+                            .snippet("For more info click here"));
+                    m.setTag(field.getId());
+                }
+                //mMap.setOnInfoWindowClickListener(this);
+            }
+            @Override
+            public void onCancel() {
 
-        for(Field field : data) {
-            LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
-            Marker m = mMap.addMarker(new MarkerOptions()
-                    .position(position)
-                    .title(field.getName())
-                    .snippet("For more info click here"));
-            m.setTag(field.getId());
-        }
+            }
+        });
+
         mMap.setOnInfoWindowClickListener(this);
-
-//
-//        Field f = data.get(0);
-//        LatLng israel = new LatLng(Double.parseDouble(f.getLatitude()), Double.parseDouble(f.getLongitude()));
-//        mMap.addMarker(new MarkerOptions().position(israel).title(f.getName()));
-//
-//        Field f1 = data.get(1);
-//        LatLng israel2 = new LatLng(Double.parseDouble(f1.getLatitude()), Double.parseDouble(f1.getLongitude()));
-//        mMap.addMarker(new MarkerOptions().position(israel2).title(f1.getName()));
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();

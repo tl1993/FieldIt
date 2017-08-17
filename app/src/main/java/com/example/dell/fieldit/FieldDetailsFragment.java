@@ -66,7 +66,7 @@ public class FieldDetailsFragment extends Fragment {
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             id = getArguments().getString("id");
-            fd = Model.instance.getAllFields().get(Integer.parseInt(id));
+            fd = Model.getInstance().getFieldById(id);
         }
     }
 
@@ -130,14 +130,30 @@ public class FieldDetailsFragment extends Fragment {
                             || !type.equals(fd.getType()) || !description.equals(fd.getDescription())
                             || !isLighted.equals(fd.getIslighted())) {
 
-                        Field editedField = new Field(fd.getId(),name,type,latitude,longitude,description,isLighted);
+                        final Field editedField = new Field(name,type,latitude,longitude,description,isLighted);
+                        editedField.setId(fd.getId());
                         progressBar.setVisibility(View.VISIBLE);
 
-                        Model.instance.updateField(Integer.parseInt(editedField.getId()),editedField);
-                        progressBar.setVisibility(View.GONE);
-                        fd = editedField;
-                        showMessage(R.string.save_successfully, false);
-                        exitEditMode();
+                        Model.getInstance().editField(editedField,imageBitmap,new Model.EditFieldListener() {
+                            @Override
+                            public void onResult() {
+
+                                progressBar.setVisibility(View.GONE);
+
+                                // Show relevant message
+                                showMessage(R.string.save_successfully, false);
+                                fd = editedField;
+                                exitEditMode();
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                                // Show relevant message
+                                showMessage(R.string.save_error, false);
+                            }
+                        });
+
                     } else {
                         Log.d("TAG", "onClick: Nothing has changed");
                         showMessage(R.string.no_field_has_changed, false);
@@ -154,11 +170,22 @@ public class FieldDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                Model.instance.deleteField(fd);
-                progressBar.setVisibility(View.GONE);
-                showMessage(R.string.delete_successfully, true);
-                exitEditMode();
-                //showMessage(R.string.delete_error);
+                Model.getInstance().deleteField(fd.getId(),new Model.DeleteFieldListener() {
+                    @Override
+                    public void onResult(String id) {
+                        progressBar.setVisibility(View.GONE);
+                        showMessage(R.string.delete_successfully, true);
+                        exitEditMode();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                        // Show relevant message
+                        showMessage(R.string.delete_error, false);
+                    }
+
+                });
             }
         });
 
