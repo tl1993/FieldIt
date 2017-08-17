@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">FieldIt</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="new_review_cancel_button">Cancel</string>
+    <string name="new_review_save_button">Save</string>
 </resources>
