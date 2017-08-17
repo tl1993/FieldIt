@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.jar.Pack200;
 
 
 public class Model {
@@ -27,9 +28,9 @@ public class Model {
     private List<Field> fieldsData = new LinkedList<Field>();
 
     public List<Field> getAllFields() {
-        Field fd1 = new Field ("1", "Gal", "Grass", 31.771959, 35.217018, "cool field",true);
+        Field fd1 = new Field ("1", "Gal", "Grass", "31.771959", "35.217018", "cool field",true);
         data.add(fd1);
-        Field fd2 = new Field("2", "Tomer", "Grass", 32.109333, 34.855499, "cool field",true);
+        Field fd2 = new Field("2", "Tomer", "Grass", "32.109333", "34.855499", "cool field",true);
         data.add(fd2);
         return data;
     }
@@ -146,7 +147,7 @@ public class Model {
     public void addField(final Field field, final Bitmap imageBitmap, final AddFieldListener listener){
 
         // Get new key from Firebase
-        field.setId(modelFirebase.getNewKey());
+        field.setId(modelFirebase.getNewFieldKey());
 
         // If we need to save image
         if (imageBitmap != null) {
@@ -313,6 +314,13 @@ public class Model {
         }
     }
 
+
+    public void saveReview(String field_id,String text,int rating)
+    {
+        String user_id = modelFirebase.getUser().getUid();
+        String id = modelFirebase.getNewReviewKey();
+        Review review = new Review(id,text,rating,field_id,user_id);
+    }
     private String getLocalImageFileName(String url) {
 
         // Get image name by url

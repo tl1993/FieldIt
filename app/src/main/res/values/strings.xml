@@ -3,6 +3,9 @@
     <string name="app_name">FieldIt</string>
     <string name="title_activity_maps">Map</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="new_review_cancel_button">Cancel</string>
+    <string name="new_review_save_button">Save</string>
     <string-array name="field_types">
         <item>Asphalt</item>
         <item>Grass</item>
@@ -17,6 +20,7 @@
 
     <!-- Field Details-->
     <string name="field_details_edit_button">Edit Field</string>
+    <string name="field_details_add_review">Add Review</string>
 
     <!-- New Field-->
     <string name="name">Name</string>
@@ -30,7 +34,6 @@
     <string name="new_field_save_button">Save</string>
     <string name="field_details_delete_button">Delete</string>
     <string name="title_activity_field">FieldActivity</string>
-
     <!-- Messages -->
     <string name="no_field_has_changed">You need to change at least one field</string>
     <string name="must_fill_all_fields">You must fill all the fields in the form</string>

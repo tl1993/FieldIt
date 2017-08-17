@@ -166,10 +166,19 @@ public class ModelFirebase {
             }
         });
     }
-    public String getNewKey() {
+    public FirebaseUser getUser()
+    {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+    public String getNewFieldKey() {
 
         // Push a new child node to the fields node and return it's id
         return database.getReference("fields").push().getKey();
+    }
+
+    public String getNewReviewKey() {
+        // Push a new child node to the review node and return it's id
+        return database.getReference("reviews").push().getKey();
     }
     public void saveImage(Bitmap imageBitmap, String name, final Model.SaveImageListener listener){
 
@@ -301,7 +310,6 @@ public class ModelFirebase {
                    // MainActivity.changeRefreshButtonIcon(true);
                 }
             }
-
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {

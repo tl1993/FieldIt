@@ -64,7 +64,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        List<Field> data = Model.instance.getAllFields();
+        List<Field> data = Model.getInstance().getAllFields();
 
         for(Field field : data) {
             LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
