@@ -120,7 +120,7 @@ public class FieldDetailsFragment extends Fragment {
 
                 // Check validation of fields
                 if(!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
-                        && type.trim().isEmpty() && description.trim().isEmpty()) {
+                        && !type.trim().isEmpty() && !description.trim().isEmpty()) {
 
                     // Check if at least one field has changed
                     if (!name.equals(fd.getName()) || !longitude.equals(fd.getLongitude()) || !latitude.equals(fd.getLatitude())
@@ -131,13 +131,14 @@ public class FieldDetailsFragment extends Fragment {
                         progressBar.setVisibility(View.VISIBLE);
 
                         Model.instance.updateField(Integer.parseInt(editedField.getId()),editedField);
+                        progressBar.setVisibility(View.INVISIBLE);
 
                     } else {
-                        Toast.makeText(getActivity(), getString(R.string.no_field_has_changed), Toast.LENGTH_LONG);
+                        Log.d("TAG", "onClick: Nothing has changed");
                     }
                 } else {
                     // Show relevant message
-                    Toast.makeText(getActivity(), getString(R.string.must_fill_all_fields), Toast.LENGTH_LONG);
+                    Log.d("TAG", "onClick: Field is empty");
                 }
             }
         });
