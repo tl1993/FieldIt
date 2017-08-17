@@ -17,15 +17,15 @@ public class Field {
     private String name;
     private String type;
     private String userId;
-    private double longitude;
-    private double latitude;
+    private String longitude;
+    private String latitude;
     private String description;
     private String imageName;
     private boolean isLighted;
     private double lastUpdated;
     private boolean isDeleted;
 
-    public Field(String id,String name,String type,double latitude,double longitude,String description,boolean isLighted)
+    public Field(String id,String name,String type,String latitude,String longitude,String description,boolean isLighted)
     {
         this.id = id;
         this.name = name;
@@ -39,8 +39,8 @@ public class Field {
     public  String getId(){return this.id;}
     public  String getName() { return this.name;}
     public  String getType() {return this.type;}
-    public double getLongitude(){return this.longitude;}
-    public double getLatitude() {return this.latitude;}
+    public String getLongitude(){return this.longitude;}
+    public String getLatitude() {return this.latitude;}
     public String  getDescription() {return this.description;}
     public String getImageName() { return this.imageName;}
     public String getUserId() { return this.userId;}
@@ -51,8 +51,8 @@ public class Field {
     public void setId(String id) { this.id = id;}
     public void setName(String name) { this.name = name;}
     public void setType(String type) { this.type = type;}
-    public void setLongitude(double longitude) { this.longitude = longitude;}
-    public void setLatitude(double latitude) { this.latitude = latitude;}
+    public void setLongitude(String longitude) { this.longitude = longitude;}
+    public void setLatitude(String latitude) { this.latitude = latitude;}
     public void setDescription(String description) { this.description = description;}
     public void setImageName(String imageName){ this.imageName = imageName;}
     public void setLastUpdated(double lastUpdated) { this.lastUpdated = lastUpdated;}
