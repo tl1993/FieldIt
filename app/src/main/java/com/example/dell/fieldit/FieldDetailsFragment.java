@@ -1,5 +1,7 @@
 package com.example.dell.fieldit;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -98,6 +100,7 @@ public class FieldDetailsFragment extends Fragment {
 
         saveBtn = (Button) contentView.findViewById(R.id.field_details_save_button);
         deleteBtn = (Button) contentView.findViewById(R.id.field_details_delete_button);
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,15 +134,31 @@ public class FieldDetailsFragment extends Fragment {
                         progressBar.setVisibility(View.VISIBLE);
 
                         Model.instance.updateField(Integer.parseInt(editedField.getId()),editedField);
-                        progressBar.setVisibility(View.INVISIBLE);
-
+                        progressBar.setVisibility(View.GONE);
+                        fd = editedField;
+                        showMessage(R.string.save_successfully, false);
+                        exitEditMode();
                     } else {
                         Log.d("TAG", "onClick: Nothing has changed");
+                        showMessage(R.string.no_field_has_changed, false);
                     }
                 } else {
                     // Show relevant message
                     Log.d("TAG", "onClick: Field is empty");
+                    showMessage(R.string.must_fill_all_fields, false);
                 }
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                Model.instance.deleteField(fd);
+                progressBar.setVisibility(View.GONE);
+                showMessage(R.string.delete_successfully, true);
+                exitEditMode();
+                //showMessage(R.string.delete_error);
             }
         });
 
@@ -200,6 +219,7 @@ public class FieldDetailsFragment extends Fragment {
                 isEditMode = false;
                 disableButtons();
                 cancelChanges();
+                //showMessage(R.string.Action_canceled, false);
             }
         }
         else
@@ -242,5 +262,22 @@ public class FieldDetailsFragment extends Fragment {
         //imageView.setImageBitmap(imagebtmp);
         spinner.setSelection(adapter.getPosition(fd.getType()));
     }
+
+    private void showMessage(int messageCode, Boolean shouldExit) {
+        String message = getResources().getString(messageCode);
+        DialogFragment dialog = new AlertDialog();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        args.putBoolean("shouldExit",shouldExit);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "TAG");
+    }
+
+    private void exitEditMode() {
+        changeEnableEditFields();
+        isEditMode = false;
+        disableButtons();
+    }
+
 
 }
