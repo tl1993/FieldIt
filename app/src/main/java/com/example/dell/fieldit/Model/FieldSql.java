@@ -25,8 +25,8 @@ public class FieldSql {
                 FIELD_ID + " TEXT PRIMARY KEY," +
                 FIELD_NAME + " TEXT," +
                 FIELD_TYPE + " TEXT," +
-                FIELD_LONGITUDE + " DECIMAL(9,6)," +
-                FIELD_LATITUDE + " DECIMAL(9,6)," +
+                FIELD_LONGITUDE + " TEXT," +
+                FIELD_LATITUDE + " TEXT," +
                 FIELD_DESCRIPTION + " TEXT," +
                 FIELD_IMAGE_NAME + " TEXT," +
                 FIELD_USER_ID + " TEXT," +
@@ -60,8 +60,8 @@ public class FieldSql {
                 String name = cursor.getString(nameIndex);
                 String type = cursor.getString(typeIndex);
                 String description = cursor.getString(descriptionIndex);
-                double latitude = cursor.getDouble(latitudeIndex);
-                double longitude = cursor.getDouble(longitudeIndex);
+                String latitude = cursor.getString(latitudeIndex);
+                String longitude = cursor.getString(longitudeIndex);
                 String imageName = cursor.getString(imageNameIndex);
                 String userId = cursor.getString(userIdIndex);
                 boolean isLighted = (cursor.getInt(isLightedIndex)==1);
@@ -97,8 +97,8 @@ public class FieldSql {
                 String name = cursor.getString(nameIndex);
                 String type = cursor.getString(typeIndex);
                 String description = cursor.getString(descriptionIndex);
-                double latitude = cursor.getDouble(latitudeIndex);
-                double longitude = cursor.getDouble(longitudeIndex);
+                String latitude = cursor.getString(latitudeIndex);
+                String longitude = cursor.getString(longitudeIndex);
                 String imageName = cursor.getString(imageNameIndex);
                 String userId = cursor.getString(userIdIndex);
                 boolean isLighted = (cursor.getInt(isLightedIndex)==1);
