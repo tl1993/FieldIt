@@ -10,11 +10,11 @@ import java.util.Map;
 public class Review {
     private String id;
     private String text;
-    private double stars;
+    private int stars;
     private String field_id;
     private String user_id;
 
-    public Review(String id,String text, double stars,String field_id,String user_id)
+    public Review(String id,String text, int stars,String field_id,String user_id)
     {
         this.id = id;
         this.text = text;
@@ -22,6 +22,12 @@ public class Review {
         this.field_id = field_id;
         this.user_id = user_id;
     }
+
+    public String getId() { return this.id;}
+    public String getText() { return this.text;}
+    public String getField_id() { return this.field_id;}
+    public String getUser_id() { return this.user_id;}
+    public int getStars() { return this.stars;}
 
     public Map<String, Object> toMap()
     {
