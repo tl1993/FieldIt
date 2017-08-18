@@ -25,6 +25,20 @@ public class Field {
     private double lastUpdated;
     private boolean isDeleted;
 
+    public Field() {
+
+    }
+
+    public Field(String name,String type,String latitude,String longitude,String description,boolean isLighted)
+    {
+        this.name = name;
+        this.type = type;
+        this.description=description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.isLighted = isLighted;
+    }
+
     public Field(String id,String name,String type,String latitude,String longitude,String description,boolean isLighted)
     {
         this.id = id;
@@ -58,7 +72,7 @@ public class Field {
     public void setLastUpdated(double lastUpdated) { this.lastUpdated = lastUpdated;}
     public void setIsDeleted(boolean isDeleted){ this.isDeleted = isDeleted;}
     public void setUserId(String userId) { this.userId = userId;}
-    public void setIsLighted(boolean isLighted){this.isLighted = isLighted;}
+    public void setLighted(boolean isLighted){this.isLighted = isLighted;}
 
      public Map<String, Object> toMap() {
          HashMap<String, Object> result = new HashMap<>();

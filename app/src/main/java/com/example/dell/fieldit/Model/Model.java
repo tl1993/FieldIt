@@ -7,6 +7,9 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.webkit.URLUtil;
+
+import com.example.dell.fieldit.MyApplication;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,9 +31,9 @@ public class Model {
     private List<Field> fieldsData = new LinkedList<Field>();
 
     public List<Field> getAllFields() {
-        Field fd1 = new Field ("1", "Gal", "Grass", "31.771959", "35.217018", "cool field",true);
+        Field fd1 = new Field ("0", "Gal", "Grass", "31.771959", "35.217018", "cool field",true);
         data.add(fd1);
-        Field fd2 = new Field("2", "Tomer", "Grass", "32.109333", "34.855499", "cool field",true);
+        Field fd2 = new Field("1", "Tomer", "Grass", "32.109333", "34.855499", "cool field",true);
         data.add(fd2);
         return data;
     }
@@ -44,7 +47,7 @@ public class Model {
         modelFirebase.handleDatabaseChanges();
 
         // Init local database model
-        //modelSql = new ModelSql(MyApplication.getAppContext());
+        modelSql = new ModelSql(MyApplication.getAppContext());
     }
 
     public static Model getInstance() {
@@ -56,10 +59,9 @@ public class Model {
         public void onCancel();
     }
 
-//    public void getAllFieldsAsynch(final GetFieldsListener listener) {
-//
+    public void getAllFieldsAsynch(final GetFieldsListener listener) {
+
 //        if (CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
-//
 //
 //            // Get the last update time
 //            final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
@@ -120,11 +122,11 @@ public class Model {
 //        }
 //        else
 //        {
-//            // Return the complete field list (ordered by field name) to the caller
-//            List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
-//            listener.onResult(fieldsList, null);
-//        }
-//    }
+            // Return the complete field list (ordered by field name) to the caller
+            List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
+            listener.onResult(fieldsList, null);
+        //}
+    }
 
     public List<Field> refreshFieldsList() {
 
@@ -220,7 +222,8 @@ public class Model {
             public void onResult(String id) {
 
                 // Remove field's image from the device
-                removeImageFromDevice(FieldSql.getFieldById(modelSql.getReadbleDB(), id).getImageName());
+                //TODO: IMAGGE HANDLE
+                //removeImageFromDevice(FieldSql.getFieldById(modelSql.getReadbleDB(), id).getImageName());
 
                 // Delete the field from the local database
                 FieldSql.deleteField(modelSql.getReadbleDB(), id);

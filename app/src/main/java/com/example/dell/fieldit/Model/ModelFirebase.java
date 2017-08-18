@@ -261,12 +261,12 @@ public class ModelFirebase {
                     if (Model.getInstance().getFieldById(field.getId()) == null) {
 
                         // Get the current user and check if it is different than the user that created the field
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        if (!user.getUid().equals(field.getUserId())) {
-
-                            // Set the icon of the refresh button to "updates"
-                            //MainActivity.changeRefreshButtonIcon(true);
-                        }
+//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                        if (!user.getUid().equals(field.getUserId())) {
+//
+//                            // Set the icon of the refresh button to "updates"
+//                            //MainActivity.changeRefreshButtonIcon(true);
+//                        }
                     }
 
                     // Add the field to the local database
@@ -292,23 +292,25 @@ public class ModelFirebase {
 
                     // Update the field in the local database
                     FieldSql.editField(Model.getInstance().modelSql.getWritableDB(), field);
-                }
-                // If the field is deleted and the current user is different than the user that created the field
-                else if (!user.getUid().equals(field.getUserId())) {
+                } else {
+                    // If the field is deleted and the current user is different than the user that created the field
+                    //else if (!user.getUid().equals(field.getUserId())) {
 
                     // Remove field's image from the device
-                    Model.getInstance().removeImageFromDevice(field.getImageName());
+                    //TODO: IMAGE HANDLE
+                    //Model.getInstance().removeImageFromDevice(field.getImageName());
 
                     // Delete the field from the local database
                     FieldSql.deleteField(Model.getInstance().modelSql.getWritableDB(), field.getId());
+                    //}
                 }
 
                 // If the current user is different than the user that created the field
-                if (!user.getUid().equals(field.getUserId())) {
-
-                    // Set the icon of the refresh button to "updates"
-                   // MainActivity.changeRefreshButtonIcon(true);
-                }
+//                if (!user.getUid().equals(field.getUserId())) {
+//
+//                    // Set the icon of the refresh button to "updates"
+//                   // MainActivity.changeRefreshButtonIcon(true);
+//                }
             }
 
             @Override

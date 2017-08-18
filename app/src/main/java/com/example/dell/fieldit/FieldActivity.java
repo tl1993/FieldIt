@@ -1,6 +1,5 @@
 package com.example.dell.fieldit;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +47,7 @@ public class FieldActivity extends AppCompatActivity {
                 getMenuInflater().inflate(R.menu.activity_main_menu,menu);
                 break;
             case MapsActivity.DETAILS_FRAGMENT:
-                getMenuInflater().inflate(R.menu.activity_trip_details_menu,menu);
+                getMenuInflater().inflate(R.menu.activity_field_details_menu,menu);
                 break;
         }
         //getMenuInflater().inflate(R.menu.activity_main_menu,menu);
