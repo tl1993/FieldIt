@@ -27,7 +27,7 @@
             <EditText
                 android:id="@+id/new_review_text"
                 android:layout_width="match_parent"
-                android:layout_height="219dp"
+                android:layout_height="184dp"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ'קראטוןםפשדגכעיחלךףזסבהנמצתץ"
                 android:gravity="top"
                 android:hint="tell us what you think"
@@ -38,14 +38,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
-         <RatingBar
-             android:id="@+id/new_review_rating"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:numStars="5"
-             android:rating="5"/>
+            <RatingBar
+                android:id="@+id/new_review_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="5" />
         </LinearLayout>
 
     <LinearLayout

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
@@ -27,7 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMapLongClickListener
+{
     public static final int ADD_FRAGMENT = 1;
     public static final int REFRESH_FRAGMENT = 2;
     public static final int LOGOUT_FRAGMENT = 3;
@@ -84,7 +86,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         mMap.setOnInfoWindowClickListener(this);
-
+        mMap.setOnMapLongClickListener(this);
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
@@ -104,6 +106,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void onMapLongClick(LatLng point)
+    {
+        String latitude =String.valueOf(point.latitude);
+        String longitude = String.valueOf(point.longitude);
+        Intent AddIntent = new Intent(this, FieldActivity.class);
+        AddIntent.putExtra("frgToLoad", ADD_FRAGMENT);
+        AddIntent.putExtra("latitude",latitude);
+        AddIntent.putExtra("longitude",longitude);
+        startActivity(AddIntent);
+
+    }
     private void getDeviceLocation() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)

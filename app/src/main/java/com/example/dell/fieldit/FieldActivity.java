@@ -17,7 +17,13 @@ public class FieldActivity extends AppCompatActivity {
         switch (intentCode) {
             case MapsActivity.ADD_FRAGMENT:
                 AddFieldFragment AddFragment = AddFieldFragment.newInstance();
-
+                if (getIntent().hasExtra("latitude"))
+                {
+                    Bundle args = new Bundle();
+                    args.putString("latitude",getIntent().getExtras().getString("latitude"));
+                    args.putString("longitude",getIntent().getExtras().getString("longitude"));
+                    AddFragment.setArguments(args);
+                }
                 FragmentTransaction tran = getFragmentManager().beginTransaction();
                 tran.add(R.id.activity_field, AddFragment);
                 tran.commit();

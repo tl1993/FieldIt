@@ -40,6 +40,8 @@ public class AddFieldFragment extends Fragment {
     CheckBox isLightedCb;
     private ProgressBar progressBar;
     Spinner spinner;
+    String latitudeArg;
+    String longitudeArg;
     //ProgressBar progressBar;
 
     //private OnFragmentInteractionListener mListener;
@@ -52,8 +54,6 @@ public class AddFieldFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AddFieldFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -68,6 +68,13 @@ public class AddFieldFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        latitudeArg = "";
+        longitudeArg = "";
+        if ((getArguments() != null)&&(!getArguments().isEmpty())) {
+            latitudeArg = getArguments().getString("latitude");
+            longitudeArg = getArguments().getString("longitude");
+        }
+
     }
 
     @Override
@@ -98,6 +105,12 @@ public class AddFieldFragment extends Fragment {
         longitudeEt = (EditText) contentView.findViewById(R.id.new_field_longitude);
         latitudeEt = (EditText) contentView.findViewById(R.id.new_field_latitude);
         descriptionEt = (EditText) contentView.findViewById(R.id.new_field_description);
+
+        if(!latitudeArg.isEmpty())
+        {
+            latitudeEt.setText(latitudeArg);
+            longitudeEt.setText(longitudeArg);
+        }
 
         Button saveBtn = (Button) contentView.findViewById(R.id.new_field_save_button);
         Button cancelBtn = (Button) contentView.findViewById(R.id.new_field_cancel_button);

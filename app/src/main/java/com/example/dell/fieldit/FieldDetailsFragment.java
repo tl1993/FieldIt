@@ -2,6 +2,7 @@ package com.example.dell.fieldit;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -33,7 +34,7 @@ public class FieldDetailsFragment extends Fragment {
 
     // private OnFragmentInteractionListener mListener;
     private Boolean isEditMode = false;
-    private String id;
+    private String fieldId;
     Field fd;
     ArrayAdapter<CharSequence> adapter;
 
@@ -65,8 +66,8 @@ public class FieldDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            id = getArguments().getString("id");
-            fd = Model.getInstance().getFieldById(id);
+            fieldId = getArguments().getString("id");
+            fd = Model.getInstance().getFieldById(fieldId);
         }
     }
 
@@ -248,6 +249,16 @@ public class FieldDetailsFragment extends Fragment {
                 cancelChanges();
                 //showMessage(R.string.Action_canceled, false);
             }
+        }
+        else if(id == R.id.add_review_button)
+        {
+            AddReviewFregment addReviewFregment = AddReviewFregment.newInstance();
+            Bundle args = new Bundle();
+            args.putString("field_id", fieldId);
+            addReviewFregment.setArguments(args);
+            FragmentTransaction tran = getFragmentManager().beginTransaction();
+            tran.replace(R.id.activity_field,addReviewFregment);
+            tran.commit();
         }
         else
         {
