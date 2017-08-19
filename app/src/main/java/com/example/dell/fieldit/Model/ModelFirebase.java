@@ -166,6 +166,27 @@ public class ModelFirebase {
             }
         });
     }
+    public void addReview(Review review,final Model.AddReviewListener listener) {
+        DatabaseReference myRef = database.getReference("reviews");
+        myRef.child(review.getId()).setValue(review.toMap(), new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                // If there isn't an error
+                if (databaseError == null) {
+
+                    // Call listener's onResult method
+                    listener.onResult();
+                }
+                // If there is an error
+                else {
+
+                    // Call listener's onCancel method
+                    listener.onCancel();
+                }
+            }
+        });
+    }
     public FirebaseUser getUser()
     {
         return FirebaseAuth.getInstance().getCurrentUser();

@@ -43,6 +43,7 @@
     <string name="delete_error">An error occurred while deleting... </string>
     <string name="Action_canceled">Action canceled</string>
     <string name="field_added_successfully">Field added successfully!</string>
+    <string name="review_added_successfully">Review added successfully!</string>
 
     <!--Login-->
     <string name="action_sign_in_short">Register</string>

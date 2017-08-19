@@ -33,7 +33,8 @@ public class ModelSql {
         @Override
         public void onCreate(SQLiteDatabase db) {
 
-            // Create both trips and last upadte time tables
+            // Create both local tables
+            ReviewSql.create(db);
             FieldSql.create(db);
             LastUpdateSql.create(db);
         }
@@ -42,6 +43,7 @@ public class ModelSql {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
             // Drop both trips and last upadte time tables
+            ReviewSql.drop(db);
             FieldSql.drop(db);
             LastUpdateSql.drop(db);
 

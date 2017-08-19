@@ -20,12 +20,12 @@ public class ReviewSql {
     final static String REVIEW_USER_ID = "user_id";
 
     static public void create(SQLiteDatabase db) {
-        db.execSQL("create table " + REVIEW_TABLE + " ( " +
+        db.execSQL("create table " + REVIEW_TABLE + " (" +
                 REVIEW_ID + " TEXT PRIMARY KEY," +
                 REVIEW_TEXT + " TEXT," +
                 REVIEW_RATING + " INT," +
-                REVIEW_FIELD_ID + "TEXT," +
-                REVIEW_USER_ID + "TEXT);");
+                REVIEW_FIELD_ID + " TEXT," +
+                REVIEW_USER_ID + " TEXT);");
     }
 
     public static void drop(SQLiteDatabase db) {
@@ -63,7 +63,7 @@ public class ReviewSql {
         return reviews;
     }
 
-    public void addReview(SQLiteDatabase db, Review review) {
+    public static void addReview(SQLiteDatabase db, Review review) {
         // Add review to reviews table
         ContentValues values = new ContentValues();
         values.put(REVIEW_ID,review.getId());
@@ -74,7 +74,7 @@ public class ReviewSql {
         db.insertWithOnConflict(REVIEW_TABLE, REVIEW_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public void deleteReview(SQLiteDatabase db, String id){
+    public static void deleteReview(SQLiteDatabase db, String id){
         String where = REVIEW_FIELD_ID + " = ?";
         String[] args = {id};
         db.delete(REVIEW_TABLE, where, args);

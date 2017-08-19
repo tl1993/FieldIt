@@ -145,6 +145,10 @@ public class Model {
         public void onResult();
         public void onCancel();
     }
+    public interface AddReviewListener{
+        public void onResult();
+        public void onCancel();
+    }
 
     public void addField(final Field field, final Bitmap imageBitmap, final AddFieldListener listener){
 
@@ -318,12 +322,32 @@ public class Model {
     }
 
 
-    public void saveReview(String field_id,String text,int rating)
+    public void saveReview(String field_id,String text,int rating,final AddReviewListener listener)
     {
         String user_id = modelFirebase.getUser().getUid();
         String id = modelFirebase.getNewReviewKey();
-        Review review = new Review(id,text,rating,field_id,user_id);
+        final Review review = new Review(id,text,rating,field_id,user_id);
+        // Add field to Firebase
+        modelFirebase.addReview(review, new AddReviewListener() {
+            @Override
+            public void onResult() {
+
+                // Add the field to the local database
+                ReviewSql.addReview(Model.getInstance().modelSql.getWritableDB(), review);
+
+                // Call listener's onResult method
+                listener.onResult();
+            }
+
+            @Override
+            public void onCancel() {
+
+                // Call listener's onCancel method
+                listener.onCancel();
+            }
+        });
     }
+
     private String getLocalImageFileName(String url) {
 
         // Get image name by url

@@ -1,5 +1,6 @@
 package com.example.dell.fieldit;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 
 import com.example.dell.fieldit.Model.Model;
@@ -32,6 +34,7 @@ public class AddReviewFregment extends Fragment {
     EditText editText;
     RatingBar ratingBar;
     String field_id;
+    ProgressBar progressBar;
     //private OnFragmentInteractionListener mListener;
 
     public AddReviewFregment() {
@@ -69,7 +72,7 @@ public class AddReviewFregment extends Fragment {
         imageView = (ImageView) contentView.findViewById(R.id.new_review_imageview);
         editText = (EditText) contentView.findViewById(R.id.new_review_text);
         ratingBar = (RatingBar) contentView.findViewById(R.id.new_review_rating);
-
+        progressBar = (ProgressBar) contentView.findViewById(R.id.review_progressBar);
         Button saveBtn = (Button) contentView.findViewById(R.id.new_review_save_button);
         Button cancelBtn = (Button) contentView.findViewById(R.id.new_review_cancel_button);
 
@@ -78,7 +81,20 @@ public class AddReviewFregment extends Fragment {
             public void onClick(View v) {
                 String text = editText.getText().toString();
                 int rating = ratingBar.getNumStars();
-                Model.getInstance().saveReview(field_id,text,rating);
+               progressBar.setVisibility(View.VISIBLE);
+
+                Model.getInstance().saveReview(field_id,text,rating,new Model.AddReviewListener() {
+                    @Override
+                    public void onResult() {
+                        progressBar.setVisibility(View.GONE);
+                        showMessage(R.string.review_added_successfully);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        showMessage(R.string.save_error);
+                    }
+                });
                 //TODO replace transaction
             }
         });
@@ -93,7 +109,15 @@ public class AddReviewFregment extends Fragment {
         return contentView;
     }
 
-
+    private void showMessage(int messageCode) {
+        String message = getResources().getString(messageCode);
+        DialogFragment dialog = new AlertDialog();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        args.putBoolean("shouldExit",true);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "TAG");
+    }
     public void onAttach(Context context) {
         super.onAttach(context);
     }
