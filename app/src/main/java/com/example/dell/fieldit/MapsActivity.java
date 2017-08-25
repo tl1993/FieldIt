@@ -23,6 +23,7 @@ import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -291,22 +292,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Handle the processing of the image from the user
-//        if (requestCode == TAKING_IMAGE && resultCode == Activity.RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//        }
 
-        switch(requestCode) {
-            case ADD_FRAGMENT:
-                if(resultCode == Activity.RESULT_OK) {
+        // Handle data change by user
+        if (requestCode == ADD_FRAGMENT || requestCode == DETAILS_FRAGMENT) {
+            if(resultCode == Activity.RESULT_OK) {
+                refreshMapObjects();
+            }
+        }
+    }
 
-                }
-                break;
-            case DETAILS_FRAGMENT:
-                if(resultCode == Activity.RESULT_OK) {
-
-                }
-                break;
+    private void refreshMapObjects() {
+        mMap.clear();
+        List<Field> updatedFields = Model.getInstance().refreshFieldsList();
+        for(Field field : updatedFields) {
+            LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
+            Marker m = mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(field.getName())
+                    .snippet("For more info click here"));
+            m.setTag(field.getId());
         }
     }
 }
