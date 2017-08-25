@@ -168,6 +168,7 @@ public class FieldDetailsFragment extends Fragment {
                                 showMessage(R.string.save_successfully, false);
                                 fd = editedField;
                                 exitEditMode();
+                                getActivity().setResult(Activity.RESULT_OK);
                             }
 
                             @Override
@@ -200,6 +201,7 @@ public class FieldDetailsFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         showMessage(R.string.delete_successfully, true);
                         exitEditMode();
+                        getActivity().setResult(Activity.RESULT_OK);
                     }
 
                     @Override

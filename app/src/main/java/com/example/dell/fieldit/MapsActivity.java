@@ -1,9 +1,11 @@
 package com.example.dell.fieldit;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -124,8 +127,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         DetailsIntent.putExtra("frgToLoad", DETAILS_FRAGMENT);
         DetailsIntent.putExtra("id", marker.getTag().toString());
 
-        startActivity(DetailsIntent);
-
+        //startActivity(DetailsIntent);
+        startActivityForResult(DetailsIntent, DETAILS_FRAGMENT);
     }
 
     @Override
@@ -137,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         AddIntent.putExtra("frgToLoad", ADD_FRAGMENT);
         AddIntent.putExtra("latitude",latitude);
         AddIntent.putExtra("longitude",longitude);
-        startActivity(AddIntent);
+        startActivityForResult(AddIntent, ADD_FRAGMENT);
 
     }
     private void getDeviceLocation() {
@@ -265,7 +268,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent AddIntent = new Intent(this, FieldActivity.class);
                 AddIntent.putExtra("frgToLoad", ADD_FRAGMENT);
 
-                startActivity(AddIntent);
+                startActivityForResult(AddIntent, ADD_FRAGMENT);
 
                 return true;
 
@@ -284,5 +287,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle the processing of the image from the user
+//        if (requestCode == TAKING_IMAGE && resultCode == Activity.RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//        }
+
+        switch(requestCode) {
+            case ADD_FRAGMENT:
+                if(resultCode == Activity.RESULT_OK) {
+
+                }
+                break;
+            case DETAILS_FRAGMENT:
+                if(resultCode == Activity.RESULT_OK) {
+
+                }
+                break;
+        }
     }
 }

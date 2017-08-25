@@ -309,12 +309,6 @@ public class ModelFirebase {
                 // Create a field object for the current snapshot
                 Field field = dataSnapshot.getValue(Field.class);
 
-//                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
-//                    if (messageSnapshot.getKey() == "user_id") {
-//                        field.setUser_Id((String)messageSnapshot.getValue());
-//                    }
-//                }
-
                 // Set the id of the current field
                 field.setId(dataSnapshot.getKey());
 

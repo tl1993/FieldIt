@@ -156,17 +156,18 @@ public class AddFieldFragment extends Fragment {
                             @Override
                             public void onResult() {
                                 progressBar.setVisibility(View.GONE);
-                                showMessage(R.string.field_added_successfully);
+                                showMessage(R.string.field_added_successfully, true);
+                                getActivity().setResult(Activity.RESULT_OK);
                             }
 
                             @Override
                             public void onCancel() {
-                                showMessage(R.string.save_error);
+                                showMessage(R.string.save_error, false);
                             }
                         });
                 } else {
                     // Show relevant message
-                    showMessage(R.string.must_fill_all_fields);
+                    showMessage(R.string.must_fill_all_fields, false);
                 }
             }
         });
@@ -174,9 +175,8 @@ public class AddFieldFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Model.getInstance().deleteField(fd);
-                showMessage(R.string.Action_canceled);
-                //showMessage(R.string.delete_error);
+                showMessage(R.string.Action_canceled, true);
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
         });
 
@@ -255,12 +255,12 @@ public class AddFieldFragment extends Fragment {
 //        void onFragmentInteraction(Uri uri);
 //    }
 
-    private void showMessage(int messageCode) {
+    private void showMessage(int messageCode, Boolean shouldExit) {
         String message = getResources().getString(messageCode);
         DialogFragment dialog = new AlertDialog();
         Bundle args = new Bundle();
         args.putString("message", message);
-        args.putBoolean("shouldExit",true);
+        args.putBoolean("shouldExit",shouldExit);
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), "TAG");
     }
