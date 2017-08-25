@@ -32,7 +32,7 @@ import java.util.Map;
 public class ModelFirebase {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public void getAllFieldsAsynch(double lastUpdateDate, final Model.GetFieldsListener listener) {
+    public void getAllUpdatedFields(double lastUpdateDate, final Model.GetFieldsListener listener) {
 
         // Get reference for the fields node
         DatabaseReference myRef = database.getReference("fields");
@@ -68,7 +68,51 @@ public class ModelFirebase {
                 // Call listener's onResult method with both lists
                 listener.onResult(fieldsList, fieldsToDelete);
             }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+                // Call listener's onCancel method
+                listener.onCancel();
+            }
+        });
+    }
+
+            public void getAllUpdatedReviews(double lastUpdateDate, final Model.GetReviewsListener listener) {
+
+                // Get reference for the reviews node
+                DatabaseReference myRef = database.getReference("reviews");
+
+                // Get all the reviews whose last update time is equal or greater than the local last update time
+                Query query = myRef.orderByChild("lastUpdated").startAt(lastUpdateDate);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        // Create reviews list and reviews to delete list
+                        final List<Review> reviewsList = new LinkedList<Review>();
+                        final List<Review> reviewsToDelete = new LinkedList<Review>();
+
+                        // Loop over all fetched fields
+                        for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
+
+                            // Create a review object for the current snapshot
+                            Review review = reviewSnapshot.getValue(Review.class);
+
+                            // Set the id of the current review
+                            review.setId(reviewSnapshot.getKey());
+
+                            // If the field is no deleted - add it to the fields list
+                            // Otherwise - add it to the fields to delete list
+                            if (!review.getIsDeleted()) {
+                                reviewsList.add(review);
+                            } else {
+                                reviewsToDelete.add(review);
+                            }
+                        }
+
+                        // Call listener's onResult method with both lists
+                        listener.onResult(reviewsList, reviewsToDelete);
+                    }
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

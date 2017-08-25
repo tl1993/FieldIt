@@ -80,6 +80,12 @@ public class ReviewSql {
         db.delete(REVIEW_TABLE, where, args);
     }
 
+    public static double getLastUpdateDate(SQLiteDatabase db){
+
+        // Get the last update time
+        return LastUpdateSql.getLastUpdate(db, REVIEW_TABLE);
+    }
+
     public static void setLastUpdateDate(SQLiteDatabase db, double date){
 
         // Set the last update time
