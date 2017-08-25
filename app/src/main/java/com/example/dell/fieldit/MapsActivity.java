@@ -87,7 +87,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        Model.getInstance().getAllFieldsAsynch(new Model.GetFieldsListener() {
+        Model.getInstance().getAllUpdatedFields(new Model.GetFieldsListener() {
             @Override
             public void onResult(List<Field> fields, List<Field> tripsToDelete) {
                 List<Field> data = fields;

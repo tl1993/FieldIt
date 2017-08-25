@@ -45,7 +45,6 @@ public class Review {
         result.put("field_id",field_id);
         result.put("user_id",user_id);
         result.put("lastUpdated", ServerValue.TIMESTAMP);
-        result.put("is_deleted",this.isDeleted);
         return result;
     }
 }

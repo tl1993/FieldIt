@@ -85,7 +85,6 @@ public class Field {
          result.put("user_id",this.user_id);
          result.put("is_lighted",this.isLighted);
          result.put("lastUpdated",ServerValue.TIMESTAMP);
-         result.put("is_deleted",this.isDeleted);
          return result;
      }
 }
