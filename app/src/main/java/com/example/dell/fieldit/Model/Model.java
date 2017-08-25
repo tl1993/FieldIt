@@ -1,14 +1,16 @@
 package com.example.dell.fieldit.Model;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.URLUtil;
-
+import android.net.ConnectivityManager;
 import com.example.dell.fieldit.MyApplication;
 
 import java.io.File;
@@ -45,78 +47,160 @@ public class Model {
         return instance;
     }
 
+    public static boolean checkNetwork()
+    {
+        Context context = MyApplication.getAppContext();
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
     public interface GetFieldsListener{
         public void onResult(List<Field> fields, List<Field> fieldsToDelete);
         public void onCancel();
     }
 
-    public void getAllFieldsAsynch(final GetFieldsListener listener) {
+    public interface GetReviewsListener{
+        public void onResult(List<Review> reviews, List<Review> reviewsToDelete);
+        public void onCancel();
+    }
+    public void getAllUpdatedFields(final GetFieldsListener listener) {
+        
+        if (checkNetwork()) {
 
-//        if (CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
-//
-//            // Get the last update time
-//            final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
-//
-//            // Get all fields records from Firebase that where updated since local last update time
-//            modelFirebase.getAllFieldsAsynch(lastUpdateDate, new GetFieldsListener() {
-//                @Override
-//                public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
-//
-//                    // Check if there is fields that added/updated since local last update time
-//                    if (fields != null && fields.size() > 0) {
-//
-//                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
-//                        double recentUpdate = lastUpdateDate;
-//
-//                        // Loop over all these fields
-//                        for (Field field : fields) {
-//
-//                            // Add the current field to the local database
-//                            FieldSql.addField(modelSql.getWritableDB(), field);
-//
-//                            // Get the maximum last update time
-//                            if (field.getLastUpdated() > recentUpdate) {
-//                                recentUpdate = field.getLastUpdated();
-//                            }
-//                        }
-//
-//                        // Set the last update time as the maximum we find
-//                        FieldSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
-//                    }
-//
-//                    // Check if there is fields that deleted since local last update time
-//                    if (fieldsToDelete != null && fieldsToDelete.size() > 0) {
-//
-//                        // Loop over all these fields
-//                        for (Field fieldToDelete : fieldsToDelete) {
-//
-//                            // Remove field's image from the device
-//                            removeImageFromDevice(fieldToDelete.getImageName());
-//
-//                            // Delete the field from the local database
-//                            FieldSql.deleteField(modelSql.getWritableDB(), fieldToDelete.getId());
-//                        }
-//                    }
-//
-//                    // Return the complete field list (ordered by field name) to the caller
-//                    List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
-//                    listener.onResult(fieldsList, null);
-//                }
-//
-//                @Override
-//                public void onCancel() {
-//
-//                    // Call listener's onCancel method
-//                    listener.onCancel();
-//                }
-//            });
-//        }
-//        else
-//        {
-            // Return the complete field list (ordered by field name) to the caller
+            // Get the last update time
+            final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
+
+            // Get all fields records from Firebase that where updated since local last update time
+            modelFirebase.getAllUpdatedFields(lastUpdateDate, new GetFieldsListener() {
+                @Override
+                public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
+
+                    // Check if there is fields that added/updated since local last update time
+                    if (fields != null && fields.size() > 0) {
+
+                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
+                        double recentUpdate = lastUpdateDate;
+
+                        // Loop over all these fields
+                        for (Field field : fields) {
+
+                            // Add the current field to the local database
+                            FieldSql.addField(modelSql.getWritableDB(), field);
+
+                            // Get the maximum last update time
+                            if (field.getLastUpdated() > recentUpdate) {
+                                recentUpdate = field.getLastUpdated();
+                            }
+                        }
+
+                        // Set the last update time as the maximum we find
+                        FieldSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
+                    }
+
+                    // Check if there is fields that deleted since local last update time
+                    if (fieldsToDelete != null && fieldsToDelete.size() > 0) {
+
+                        // Loop over all these fields
+                        for (Field fieldToDelete : fieldsToDelete) {
+
+                            // Remove field's image from the device
+                            removeImageFromDevice(fieldToDelete.getImageName());
+
+                            // Delete the field from the local database
+                            FieldSql.deleteField(modelSql.getWritableDB(), fieldToDelete.getId());
+                        }
+                    }
+
+                    // Return the complete field list (ordered by field name) to the caller
+                    List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
+                    listener.onResult(fieldsList, null);
+                }
+
+                @Override
+                public void onCancel() {
+
+                    // Call listener's onCancel method
+                    listener.onCancel();
+                }
+            });
+        }
+        else
+        {
+             //Return the complete field list (ordered by field name) to the caller
             List<Field> fieldsList = FieldSql.getAllFields(modelSql.getReadbleDB());
             listener.onResult(fieldsList, null);
-        //}
+        }
+    }
+
+    public void getAllUpdatedReviews(final GetReviewsListener listener, final String fieldId) {
+
+        if (checkNetwork()) {
+
+            // Get the last update time
+            final double lastUpdateDate = ReviewSql.getLastUpdateDate(modelSql.getReadbleDB());
+
+            // Get all fields records from Firebase that where updated since local last update time
+            modelFirebase.getAllUpdatedReviews(lastUpdateDate, new GetReviewsListener() {
+                @Override
+                public void onResult(List<Review> reviews, List<Review> reviewsToDelete) {
+
+                    // Check if there is reviews that added/updated since local last update time
+                    if (reviews != null && reviews.size() > 0) {
+
+                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
+                        double recentUpdate = lastUpdateDate;
+
+                        // Loop over all these fields
+                        for (Review review : reviews) {
+
+                            // Add the current field to the local database
+                            ReviewSql.addReview(modelSql.getWritableDB(), review);
+
+                            // Get the maximum last update time
+                            if (review.getLastUpdated() > recentUpdate) {
+                                recentUpdate = review.getLastUpdated();
+                            }
+                        }
+
+                        // Set the last update time as the maximum we find
+                        ReviewSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
+                    }
+
+                    // Check if there is fields that deleted since local last update time
+                    if (reviewsToDelete != null && reviewsToDelete.size() > 0) {
+
+                        // Loop over all these fields
+                        for (Review reviewToDelete : reviewsToDelete) {
+
+                            // Delete the field from the local database
+                            FieldSql.deleteField(modelSql.getWritableDB(), reviewToDelete.getId());
+                        }
+                    }
+
+                    // Return the complete Review list (ordered by field name) to the caller
+                    List<Review> reviewsList = ReviewSql.getFieldReviews(modelSql.getReadbleDB(),fieldId);
+                    listener.onResult(reviewsList, null);
+                }
+
+                @Override
+                public void onCancel() {
+
+                    // Call listener's onCancel method
+                    listener.onCancel();
+                }
+            });
+        }
+        else
+        {
+            //Return the complete field list (ordered by field name) to the caller
+            List<Review> reviewsList = ReviewSql.getFieldReviews(modelSql.getReadbleDB(),fieldId);
+            listener.onResult(reviewsList, null);
+        }
     }
 
     public List<Field> refreshFieldsList() {

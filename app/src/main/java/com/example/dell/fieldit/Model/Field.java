@@ -84,7 +84,7 @@ public class Field {
          result.put("longitude",this.longitude);
          result.put("user_id",this.user_id);
          result.put("is_lighted",this.isLighted);
-//         result.put("lastUpdated", ServerValue.TIMESTAMP);
+         result.put("lastUpdated",ServerValue.TIMESTAMP);
          return result;
      }
 }

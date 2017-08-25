@@ -1,5 +1,7 @@
 package com.example.dell.fieldit.Model;
 
+import com.google.firebase.database.ServerValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,8 @@ public class Review {
     private int stars;
     private String field_id;
     private String user_id;
+    private boolean isDeleted;
+    private double lastUpdated;
 
     public Review(String id,String text, int stars,String field_id,String user_id)
     {
@@ -28,6 +32,10 @@ public class Review {
     public String getField_id() { return this.field_id;}
     public String getUser_id() { return this.user_id;}
     public int getStars() { return this.stars;}
+    public boolean getIsDeleted(){return this.isDeleted;}
+    public double getLastUpdated() {return this.lastUpdated;}
+
+    public void setId(String id){ this.id = id;}
 
     public Map<String, Object> toMap()
     {
@@ -36,6 +44,7 @@ public class Review {
         result.put("stars",stars);
         result.put("field_id",field_id);
         result.put("user_id",user_id);
+        result.put("lastUpdated", ServerValue.TIMESTAMP);
         return result;
     }
 }
