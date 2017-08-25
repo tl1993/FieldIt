@@ -47,6 +47,18 @@ public class Model {
         return instance;
     }
 
+    public static boolean checkNetwork()
+    {
+        Context context = MyApplication.getAppContext();
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
     public interface GetFieldsListener{
         public void onResult(List<Field> fields, List<Field> fieldsToDelete);
         public void onCancel();
@@ -57,14 +69,8 @@ public class Model {
         public void onCancel();
     }
     public void getAllUpdatedFields(final GetFieldsListener listener) {
-        Context context = MyApplication.getAppContext();
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
+        
+        if (checkNetwork()) {
 
             // Get the last update time
             final double lastUpdateDate = FieldSql.getLastUpdateDate(modelSql.getReadbleDB());
@@ -132,14 +138,8 @@ public class Model {
     }
 
     public void getAllUpdatedReviews(final GetReviewsListener listener, final String fieldId) {
-        Context context = MyApplication.getAppContext();
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
+        if (checkNetwork()) {
 
             // Get the last update time
             final double lastUpdateDate = ReviewSql.getLastUpdateDate(modelSql.getReadbleDB());
