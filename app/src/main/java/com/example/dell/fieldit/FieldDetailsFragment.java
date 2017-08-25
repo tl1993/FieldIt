@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,6 +38,7 @@ public class FieldDetailsFragment extends Fragment {
     // private OnFragmentInteractionListener mListener;
     private Boolean isEditMode = false;
     private String fieldId;
+    Boolean imageChanged = false;
     Field fd;
     ArrayAdapter<CharSequence> adapter;
 
@@ -79,6 +83,7 @@ public class FieldDetailsFragment extends Fragment {
 
         // Get the image view of the view
         imageView = (ImageView) contentView.findViewById(R.id.field_details_imageview);
+        imageView.setEnabled(false);
 
         // Get the progress bar
         progressBar = (ProgressBar) contentView.findViewById(R.id.details_progressBar);
@@ -97,7 +102,26 @@ public class FieldDetailsFragment extends Fragment {
         longitudeEt.setText(fd.getLongitude());
         latitudeEt.setText(fd.getLatitude());
         descriptionEt.setText(fd.getDescription());
-        //imageView.setImageBitmap(imagebtmp);
+
+
+        if (fd.getImageName() != null) {
+
+            // Load the trip's image
+            Model.getInstance().loadImage(fd.getImageName(), new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap imagebtmp) {
+                    if (imagebtmp != null) {
+                        imageBitmap = imagebtmp;
+                        // Set the loaded image in the view
+                        imageView.setImageBitmap(imagebtmp);
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                }
+            });
+        }
 
         saveBtn = (Button) contentView.findViewById(R.id.field_details_save_button);
         deleteBtn = (Button) contentView.findViewById(R.id.field_details_delete_button);
@@ -120,8 +144,6 @@ public class FieldDetailsFragment extends Fragment {
                 description = descriptionEt.getText().toString();
                 isLighted = isLightedCb.isChecked();
 
-                //TODO: CHECK IMAGE CHANGES
-
                 // Check validation of fields
                 if(!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
                         && !type.trim().isEmpty() && !description.trim().isEmpty()) {
@@ -129,10 +151,11 @@ public class FieldDetailsFragment extends Fragment {
                     // Check if at least one field has changed
                     if (!name.equals(fd.getName()) || !longitude.equals(fd.getLongitude()) || !latitude.equals(fd.getLatitude())
                             || !type.equals(fd.getType()) || !description.equals(fd.getDescription())
-                            || !isLighted.equals(fd.getIslighted())) {
+                            || !isLighted.equals(fd.getIslighted()) || imageChanged == true) {
 
                         final Field editedField = new Field(name,type,latitude,longitude,description,isLighted);
                         editedField.setId(fd.getId());
+                        editedField.setImageName(fd.getImageName());
                         progressBar.setVisibility(View.VISIBLE);
 
                         Model.getInstance().editField(editedField,imageBitmap,new Model.EditFieldListener() {
@@ -190,9 +213,36 @@ public class FieldDetailsFragment extends Fragment {
             }
         });
 
+        // Set click handler for the image view
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // open camera and take user picture
+                takePicture();
+            }
+        });
+
         return contentView;
     }
 
+    private void takePicture(){
+        // Start the camera in order to take picture from the user
+        Intent takeImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takeImageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takeImageIntent, AddFieldFragment.TAKING_IMAGE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle the processing of the image from the user
+        if (requestCode == AddFieldFragment.TAKING_IMAGE && resultCode == Activity.RESULT_OK) {
+            imageChanged = true;
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -297,8 +347,16 @@ public class FieldDetailsFragment extends Fragment {
         longitudeEt.setText(fd.getLongitude());
         latitudeEt.setText(fd.getLatitude());
         descriptionEt.setText(fd.getDescription());
-        //imageView.setImageBitmap(imagebtmp);
+
         spinner.setSelection(adapter.getPosition(fd.getType()));
+        if( fd.getImageName() != null) {
+            imageView.setImageBitmap(imageBitmap);
+        } else {
+            Bitmap defualtImage = BitmapFactory.decodeResource(MyApplication.getAppContext().getResources(),
+                    R.drawable.field);
+            imageView.setImageBitmap(defualtImage);
+        }
+
     }
 
     private void showMessage(int messageCode, Boolean shouldExit) {

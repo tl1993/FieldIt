@@ -16,7 +16,7 @@ public class Field {
     private String id;
     private String name;
     private String type;
-    private String userId;
+    private String user_id;
     private String longitude;
     private String latitude;
     private String description;
@@ -57,7 +57,7 @@ public class Field {
     public String getLatitude() {return this.latitude;}
     public String  getDescription() {return this.description;}
     public String getImageName() { return this.imageName;}
-    public String getUserId() { return this.userId;}
+    public String getUser_Id() { return this.user_id;}
     public boolean getIslighted() { return this.isLighted;}
     public double getLastUpdated() { return this.lastUpdated;}
     public boolean getIsDeleted() {return this.isDeleted;}
@@ -71,17 +71,18 @@ public class Field {
     public void setImageName(String imageName){ this.imageName = imageName;}
     public void setLastUpdated(double lastUpdated) { this.lastUpdated = lastUpdated;}
     public void setIsDeleted(boolean isDeleted){ this.isDeleted = isDeleted;}
-    public void setUserId(String userId) { this.userId = userId;}
+    public void setUser_Id(String userId) { this.user_id = userId;}
     public void setLighted(boolean isLighted){this.isLighted = isLighted;}
 
      public Map<String, Object> toMap() {
          HashMap<String, Object> result = new HashMap<>();
          result.put("name",this.name);
          result.put("type",this.type);
+         result.put("imageName", this.imageName);
          result.put("description",this.description);
          result.put("latitude",this.latitude);
          result.put("longitude",this.longitude);
-         result.put("user_id",this.userId);
+         result.put("user_id",this.user_id);
          result.put("is_lighted",this.isLighted);
          result.put("lastUpdated",ServerValue.TIMESTAMP);
          result.put("is_deleted",this.isDeleted);

@@ -67,7 +67,7 @@ public class FieldSql {
                 boolean isLighted = (cursor.getInt(isLightedIndex)==1);
                 Field field = new Field(id,name, type,latitude,longitude,description,isLighted);
                 field.setImageName(imageName);
-                field.setUserId(userId);
+                field.setUser_Id(userId);
                 fields.add(field);
 
             } while (cursor.moveToNext());
@@ -104,7 +104,7 @@ public class FieldSql {
                 boolean isLighted = (cursor.getInt(isLightedIndex)==1);
                 Field field = new Field(id,name, type,latitude,longitude,description,isLighted);
                 field.setImageName(imageName);
-                field.setUserId(userId);
+                field.setUser_Id(userId);
                 return  field;
         }
         return null;
@@ -121,7 +121,7 @@ public class FieldSql {
         values.put(FIELD_DESCRIPTION, field.getDescription());
         values.put(FIELD_LATITUDE, field.getLatitude());
         values.put(FIELD_LONGITUDE, field.getLongitude());
-        values.put(FIELD_USER_ID, field.getUserId());
+        values.put(FIELD_USER_ID, field.getUser_Id());
         values.put(FIELD_IMAGE_NAME, field.getImageName());
         if(field.getIslighted())
         {

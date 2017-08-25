@@ -25,6 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -37,14 +39,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted;
-    // The geographical location where the device is currently located. That is, the last-known
-    // location retrieved by the Fused Location Provider.
-    // private Location mLastKnownLocation;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+        // Set authorize listener to handle change in the user state
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                // Get the current user
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                // If user chose to log out
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(MapsActivity.this, LoginActivity.class));
+                    finish();
+                }
+            }
+        };
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -147,7 +169,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         updateLocationUI();
     }
 
-
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -175,6 +196,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             // mLastKnownLocation = null;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
         }
     }
 
@@ -235,26 +270,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
 
             // Handle click on refresh button
-//            case R.id.refresh_button:
-//
-//                // Refresh the trips list
-//                refreshTripsList();
-//
-//                // Show relevant message
-//                Toast.makeText(this, R.string.refresh_button_message, Toast.LENGTH_LONG).show();
-//
-//                // Set the icon of the refresh button to "no updates"
-//                changeRefreshButtonIcon(false);
-//
-//                return true;
+            case R.id.refresh_button:
+
+                // Refresh the trips list
+                Model.getInstance().refreshFieldsList();
+                return true;
 
             // If user chose to sign out
-//            case R.id.sign_out_button:
-//
-//                // Sign out using firebase api
-//                auth.signOut();
+            case R.id.signout_button:
+                // Sign out using firebase api
+                auth.signOut();
 
-                //return true;
+                return true;
         }
         return false;
     }
