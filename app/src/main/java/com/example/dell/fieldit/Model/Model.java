@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.webkit.URLUtil;
 
 import com.example.dell.fieldit.MyApplication;
@@ -27,16 +28,6 @@ public class Model {
     private final static Model instance = new Model();
     ModelFirebase modelFirebase;
     ModelSql modelSql;
-    private  List<Field> data = new LinkedList<Field>();
-    private List<Field> fieldsData = new LinkedList<Field>();
-
-    public List<Field> getAllFields() {
-        Field fd1 = new Field ("0", "Gal", "Grass", "31.771959", "35.217018", "cool field",true);
-        data.add(fd1);
-        Field fd2 = new Field("1", "Tomer", "Grass", "32.109333", "34.855499", "cool field",true);
-        data.add(fd2);
-        return data;
-    }
 
     private Model() {
 
@@ -145,6 +136,7 @@ public class Model {
         public void onResult();
         public void onCancel();
     }
+
     public interface AddReviewListener{
         public void onResult();
         public void onCancel();
@@ -161,12 +153,13 @@ public class Model {
             // Set the image name
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String imName = "image_" + field.getId() + "_" + timeStamp + ".jpg";
+            Log.d("IMGMANE", imName);
 
             // Save image to Firebase and local storage
             saveImage(imageBitmap, imName, new Model.SaveImageListener() {
                 @Override
                 public void complete(String url) {
-
+                    Log.d("SAVE_IMAGE", "complete: ");
                     // Set the field's image name as the url from Firebase
                     field.setImageName(url);
 
@@ -176,7 +169,7 @@ public class Model {
 
                 @Override
                 public void fail() {
-
+                    Log.d("SAVE_IMAGE", "fail: ");
                     // Add field to both Firebase and local database
                     saveField(field, listener);
                 }
@@ -226,9 +219,10 @@ public class Model {
             public void onResult(String id) {
 
                 // Remove field's image from the device
-                //TODO: IMAGGE HANDLE
-                //removeImageFromDevice(FieldSql.getFieldById(modelSql.getReadbleDB(), id).getImageName());
-
+                Field deletedField = FieldSql.getFieldById(modelSql.getReadbleDB(), id);
+                if(deletedField != null) {
+                    removeImageFromDevice(deletedField.getImageName());
+                }
                 // Delete the field from the local database
                 FieldSql.deleteField(modelSql.getReadbleDB(), id);
 
@@ -369,6 +363,7 @@ public class Model {
 
                 // Get image name by url
                 String localName = getLocalImageFileName(url);
+                Log.d("ImageDirectoy", localName);
 
                 // Synchronously save image locally
                 saveImageToFile(imageBitmap, localName);
@@ -394,13 +389,13 @@ public class Model {
         //MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
     }
 
-//    private void refreshGallery(){
-//
-//        // Refresh the gallery in order to remove deleted images from there
-//        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
-//                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
-//                null, null);
-//    }
+    private void refreshGallery(){
+
+        // Refresh the gallery in order to remove deleted images from there
+        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
+                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
+                null, null);
+    }
 
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
@@ -408,7 +403,7 @@ public class Model {
             // Get the storage directory on the device
             File dir = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES);
-
+            Log.d("PATH", dir.getPath());
             // If the directory not exists - create it
             if (!dir.exists()) {
                 dir.mkdir();
@@ -445,11 +440,11 @@ public class Model {
         // If the image exists
         if (fdelete.exists()) {
 
-            // If the image deleetd successfully
+            // If the image deleted successfully
             if (fdelete.delete()) {
 
                 // Refresh the gallery in order to remove deleted images from there
-               // refreshGallery();
+               refreshGallery();
             }
         }
     }

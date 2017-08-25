@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +27,15 @@ import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import static android.R.attr.imeSubtypeLocale;
 import static android.R.attr.type;
 
 public class AddFieldFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    static final int TAKING_IMAGE = 1;
     ImageView imageView = null;
     Bitmap imageBitmap = null;
     EditText nameEt;
@@ -133,13 +138,18 @@ public class AddFieldFragment extends Fragment {
                 description = descriptionEt.getText().toString();
                 isLighted = isLightedCb.isChecked();
 
-                //TODO: CHECK IMAGE CHANGES
-
                 // Check validation of fields
                 if(!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
                         && !type.trim().isEmpty() && !description.trim().isEmpty()) {
 
                         Field newField = new Field(name,type,latitude,longitude,description,isLighted);
+
+                        // Get the current user
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        // Set user as Field creator
+                        newField.setUser_Id(user.getUid());
+
                         progressBar.setVisibility(View.VISIBLE);
 
                         Model.getInstance().addField(newField,imageBitmap,new Model.AddFieldListener() {
@@ -170,6 +180,15 @@ public class AddFieldFragment extends Fragment {
             }
         });
 
+        // Set click handler for the image view
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // open camera and take user picture
+                takePicture();
+            }
+        });
+
         return contentView;
     }
 
@@ -187,6 +206,24 @@ public class AddFieldFragment extends Fragment {
 
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+    }
+
+    private void takePicture(){
+        // Start the camera in order to take picture from the user
+        Intent takeImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takeImageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takeImageIntent, TAKING_IMAGE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle the processing of the image from the user
+        if (requestCode == TAKING_IMAGE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

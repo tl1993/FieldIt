@@ -12,7 +12,7 @@
         android:icon="@android:drawable/ic_menu_rotate"
         compat:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/logout_button"
+    <item android:id="@+id/signout_button"
           android:title="@string/btn_logout"
           compat:showAsAction="ifRoom"/>
 

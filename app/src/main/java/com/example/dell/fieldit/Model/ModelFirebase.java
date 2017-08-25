@@ -98,6 +98,7 @@ public class ModelFirebase {
             }
         });
     }
+
     public void deleteField(final String id, final Model.DeleteFieldListener listener) {
 
         // Get reference for the field node
@@ -166,6 +167,7 @@ public class ModelFirebase {
             }
         });
     }
+
     public void addReview(Review review,final Model.AddReviewListener listener) {
         DatabaseReference myRef = database.getReference("reviews");
         myRef.child(review.getId()).setValue(review.toMap(), new DatabaseReference.CompletionListener() {
@@ -187,10 +189,12 @@ public class ModelFirebase {
             }
         });
     }
+
     public FirebaseUser getUser()
     {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
+
     public String getNewFieldKey() {
 
         // Push a new child node to the fields node and return it's id
@@ -201,6 +205,7 @@ public class ModelFirebase {
         // Push a new child node to the review node and return it's id
         return database.getReference("reviews").push().getKey();
     }
+
     public void saveImage(Bitmap imageBitmap, String name, final Model.SaveImageListener listener){
 
         // Get reference to the images node of Firebase storage
@@ -298,12 +303,17 @@ public class ModelFirebase {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
 
-
                 // Get the current user
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 // Create a field object for the current snapshot
                 Field field = dataSnapshot.getValue(Field.class);
+
+//                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+//                    if (messageSnapshot.getKey() == "user_id") {
+//                        field.setUser_Id((String)messageSnapshot.getValue());
+//                    }
+//                }
 
                 // Set the id of the current field
                 field.setId(dataSnapshot.getKey());
@@ -313,17 +323,15 @@ public class ModelFirebase {
 
                     // Update the field in the local database
                     FieldSql.editField(Model.getInstance().modelSql.getWritableDB(), field);
-                } else {
+                //} else {
                     // If the field is deleted and the current user is different than the user that created the field
-                    //else if (!user.getUid().equals(field.getUserId())) {
+                } else if (!user.getUid().equals(field.getUser_Id())) {
 
                     // Remove field's image from the device
-                    //TODO: IMAGE HANDLE
-                    //Model.getInstance().removeImageFromDevice(field.getImageName());
+                    Model.getInstance().removeImageFromDevice(field.getImageName());
 
                     // Delete the field from the local database
                     FieldSql.deleteField(Model.getInstance().modelSql.getWritableDB(), field.getId());
-                    //}
                 }
 
                 // If the current user is different than the user that created the field
