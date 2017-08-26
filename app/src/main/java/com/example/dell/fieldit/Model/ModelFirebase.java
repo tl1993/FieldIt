@@ -8,6 +8,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
+
+import com.example.dell.fieldit.FieldUpdateListener;
+import com.example.dell.fieldit.MapsActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +34,7 @@ import java.util.Map;
 
 public class ModelFirebase {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FieldUpdateListener fieldUpdateListener;
 
     public void getAllUpdatedFields(double lastUpdateDate, final Model.GetFieldsListener listener) {
 
@@ -331,12 +335,12 @@ public class ModelFirebase {
                     if (Model.getInstance().getFieldById(field.getId()) == null) {
 
                         // Get the current user and check if it is different than the user that created the field
-//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                        if (!user.getUid().equals(field.getUserId())) {
-//
-//                            // Set the icon of the refresh button to "updates"
-//                            //MainActivity.changeRefreshButtonIcon(true);
-//                        }
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (!user.getUid().equals(field.getUser_Id())) {
+                            if(fieldUpdateListener!= null) {
+                                fieldUpdateListener.onFieldChange();
+                            }
+                        }
                     }
 
                     // Add the field to the local database
@@ -372,12 +376,12 @@ public class ModelFirebase {
                     FieldSql.deleteField(Model.getInstance().modelSql.getWritableDB(), field.getId());
                 }
 
-                // If the current user is different than the user that created the field
-//                if (!user.getUid().equals(field.getUserId())) {
-//
-//                    // Set the icon of the refresh button to "updates"
-//                   // MainActivity.changeRefreshButtonIcon(true);
-//                }
+                if (!user.getUid().equals(field.getUser_Id())) {
+                    if(fieldUpdateListener!= null) {
+                        fieldUpdateListener.onFieldChange();
+                    }
+
+                }
             }
 
             @Override

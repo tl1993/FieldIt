@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.webkit.URLUtil;
 import android.net.ConnectivityManager;
+
+import com.example.dell.fieldit.FieldUpdateListener;
 import com.example.dell.fieldit.MyApplication;
 
 import java.io.File;
@@ -30,7 +32,6 @@ public class Model {
     private final static Model instance = new Model();
     ModelFirebase modelFirebase;
     ModelSql modelSql;
-
     private Model() {
 
         // Init Firebase model
@@ -69,7 +70,7 @@ public class Model {
         public void onCancel();
     }
     public void getAllUpdatedFields(final GetFieldsListener listener) {
-        
+
         if (checkNetwork()) {
 
             // Get the last update time
@@ -293,6 +294,10 @@ public class Model {
     public interface DeleteFieldListener{
         public void onResult(String id);
         public void onCancel();
+    }
+
+    public void setFieldUpdateListener(FieldUpdateListener lsn){
+        modelFirebase.fieldUpdateListener = lsn;
     }
 
     public void deleteField(String id, final DeleteFieldListener listener){

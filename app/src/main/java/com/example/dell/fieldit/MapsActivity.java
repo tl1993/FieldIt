@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
+import com.example.dell.fieldit.Model.ModelFirebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -34,7 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMapLongClickListener
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMapLongClickListener,FieldUpdateListener
 {
     public static final int ADD_FRAGMENT = 1;
     public static final int REFRESH_FRAGMENT = 2;
@@ -47,13 +48,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseAuth.AuthStateListener authListener;
 
     @Override
+    public void onFieldChange()
+    {
+        Model.getInstance().getAllUpdatedFields(new Model.GetFieldsListener() {
+            @Override
+            public void onResult(List<Field> fields, List<Field> tripsToDelete) {
+                mMap.clear();
+                List<Field> data = fields;
+                for(Field field : data) {
+                    LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
+                    Marker m = mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(field.getName())
+                            .snippet("For more info click here"));
+                    m.setTag(field.getId());
+                }
+                //mMap.setOnInfoWindowClickListener(this);
+            }
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
-
+        Model.getInstance().setFieldUpdateListener(this);
         // Set authorize listener to handle change in the user state
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
