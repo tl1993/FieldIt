@@ -57,7 +57,7 @@ public class Field {
     public String getLatitude() {return this.latitude;}
     public String  getDescription() {return this.description;}
     public String getImageName() { return this.imageName;}
-    public String getUser_Id() { return this.user_id;}
+    public String getUser_id() { return this.user_id;}
     public boolean getIslighted() { return this.isLighted;}
     public double getLastUpdated() { return this.lastUpdated;}
     public boolean getIsDeleted() {return this.isDeleted;}

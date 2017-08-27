@@ -336,7 +336,7 @@ public class ModelFirebase {
 
                         // Get the current user and check if it is different than the user that created the field
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        if (!user.getUid().equals(field.getUser_Id())) {
+                        if (!user.getUid().equals(field.getUser_id())) {
                             if(fieldUpdateListener!= null) {
                                 fieldUpdateListener.onFieldChange();
                             }
@@ -367,7 +367,7 @@ public class ModelFirebase {
                     FieldSql.editField(Model.getInstance().modelSql.getWritableDB(), field);
                 //} else {
                     // If the field is deleted and the current user is different than the user that created the field
-                } else if (!user.getUid().equals(field.getUser_Id())) {
+                } else if (!user.getUid().equals(field.getUser_id())) {
 
                     // Remove field's image from the device
                     Model.getInstance().removeImageFromDevice(field.getImageName());
@@ -376,7 +376,7 @@ public class ModelFirebase {
                     FieldSql.deleteField(Model.getInstance().modelSql.getWritableDB(), field.getId());
                 }
 
-                if (!user.getUid().equals(field.getUser_Id())) {
+                if (!user.getUid().equals(field.getUser_id())) {
                     if(fieldUpdateListener!= null) {
                         fieldUpdateListener.onFieldChange();
                     }

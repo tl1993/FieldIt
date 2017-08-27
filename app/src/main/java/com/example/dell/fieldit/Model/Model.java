@@ -48,8 +48,7 @@ public class Model {
         return instance;
     }
 
-    public static boolean checkNetwork()
-    {
+    public static boolean checkNetwork() {
         Context context = MyApplication.getAppContext();
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -69,6 +68,7 @@ public class Model {
         public void onResult(List<Review> reviews, List<Review> reviewsToDelete);
         public void onCancel();
     }
+
     public void getAllUpdatedFields(final GetFieldsListener listener) {
 
         if (checkNetwork()) {
@@ -403,7 +403,6 @@ public class Model {
             });
         }
     }
-
 
     public void saveReview(String field_id,String text,int rating,final AddReviewListener listener)
     {

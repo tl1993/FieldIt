@@ -121,7 +121,7 @@ public class FieldSql {
         values.put(FIELD_DESCRIPTION, field.getDescription());
         values.put(FIELD_LATITUDE, field.getLatitude());
         values.put(FIELD_LONGITUDE, field.getLongitude());
-        values.put(FIELD_USER_ID, field.getUser_Id());
+        values.put(FIELD_USER_ID, field.getUser_id());
         values.put(FIELD_IMAGE_NAME, field.getImageName());
         if(field.getIslighted())
         {

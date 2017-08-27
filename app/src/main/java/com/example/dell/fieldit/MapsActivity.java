@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
@@ -38,8 +39,8 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMapLongClickListener,FieldUpdateListener
 {
     public static final int ADD_FRAGMENT = 1;
-    public static final int REFRESH_FRAGMENT = 2;
-    public static final int LOGOUT_FRAGMENT = 3;
+    // public static final int REFRESH_FRAGMENT = 2;
+    // public static final int LOGOUT_FRAGMENT = 3;
     public static final int DETAILS_FRAGMENT = 3;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
@@ -48,8 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FirebaseAuth.AuthStateListener authListener;
 
     @Override
-    public void onFieldChange()
-    {
+    public void onFieldChange() {
         Model.getInstance().getAllUpdatedFields(new Model.GetFieldsListener() {
             @Override
             public void onResult(List<Field> fields, List<Field> tripsToDelete) {
@@ -71,6 +71,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +132,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             @Override
             public void onCancel() {
-
             }
         });
 
@@ -157,8 +157,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapLongClick(LatLng point)
-    {
+    public void onMapLongClick(LatLng point) {
         String latitude =String.valueOf(point.latitude);
         String longitude = String.valueOf(point.longitude);
         Intent AddIntent = new Intent(this, FieldActivity.class);
@@ -168,6 +167,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivityForResult(AddIntent, ADD_FRAGMENT);
 
     }
+
     private void getDeviceLocation() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -301,7 +301,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.refresh_button:
 
                 // Refresh the trips list
-                Model.getInstance().refreshFieldsList();
+                //Model.getInstance().refreshFieldsList();
+                refreshMapObjects();
                 return true;
 
             // If user chose to sign out
