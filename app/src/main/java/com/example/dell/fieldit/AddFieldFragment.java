@@ -148,7 +148,7 @@ public class AddFieldFragment extends Fragment {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         // Set user as Field creator
-                        newField.setUser_Id(user.getUid());
+                        newField.setUser_id(user.getUid());
 
                         progressBar.setVisibility(View.VISIBLE);
 

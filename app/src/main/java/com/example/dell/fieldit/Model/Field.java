@@ -71,7 +71,7 @@ public class Field {
     public void setImageName(String imageName){ this.imageName = imageName;}
     public void setLastUpdated(double lastUpdated) { this.lastUpdated = lastUpdated;}
     public void setIsDeleted(boolean isDeleted){ this.isDeleted = isDeleted;}
-    public void setUser_Id(String userId) { this.user_id = userId;}
+        public void setUser_id(String userId) { this.user_id = userId;}
     public void setLighted(boolean isLighted){this.isLighted = isLighted;}
 
      public Map<String, Object> toMap() {
