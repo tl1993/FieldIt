@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.fieldit.ReviewListFragment">
+
+    <ProgressBar
+        android:id="@+id/reviewsListProgressBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:indeterminate="true" />
+
+    <ListView
+        android:id="@+id/reviewsListListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+</FrameLayout>
