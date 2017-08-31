@@ -80,7 +80,10 @@
     <string name="log_out_success">You have logged out successfully</string>
     <string name="register_success">You have registered successfully</string>
     <string name="register_failure">An error occured with the Registration, please try again later</string>
+    <string name="field_details_review_list">Reviews</string>
 
+    <string name="reviews_fetch_failed">An error occured while retrivieing reviews.</string>
+    <string name="no_network">There is no internet connection, you can only watch the reviews list</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

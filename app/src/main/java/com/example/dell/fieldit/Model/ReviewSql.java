@@ -18,14 +18,16 @@ public class ReviewSql {
     final static String REVIEW_RATING = "rating";
     final static String REVIEW_FIELD_ID = "field_id";
     final static String REVIEW_USER_ID = "user_id";
+    final static String REVIEW_USER_EMAIL = "user_email";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + REVIEW_TABLE + " (" +
                 REVIEW_ID + " TEXT PRIMARY KEY," +
                 REVIEW_TEXT + " TEXT," +
-                REVIEW_RATING + " INT," +
+                REVIEW_RATING + " REAL," +
                 REVIEW_FIELD_ID + " TEXT," +
-                REVIEW_USER_ID + " TEXT);");
+                REVIEW_USER_ID + " TEXT, " +
+                REVIEW_USER_EMAIL + " TEXT );");
     }
 
     public static void drop(SQLiteDatabase db) {
@@ -48,13 +50,15 @@ public class ReviewSql {
             int ratingIndex = cursor.getColumnIndex(REVIEW_RATING);
             int fieldIdIndex = cursor.getColumnIndex(REVIEW_FIELD_ID);
             int userIdIndex = cursor.getColumnIndex(REVIEW_USER_ID);
+            int userEmailIndex = cursor.getColumnIndex(REVIEW_USER_EMAIL);
             do {
                 String reviewId = cursor.getString(idIndex);
                 String text = cursor.getString(textIndex);
-                int rating = cursor.getInt(ratingIndex);
+                float rating = cursor.getFloat(ratingIndex);
                 String fieldId = cursor.getString(fieldIdIndex);
                 String userId = cursor.getString(userIdIndex);
-                Review review = new Review(reviewId, text, rating, fieldId, userId);
+                String userEmail = cursor.getString(userEmailIndex);
+                Review review = new Review(reviewId, text, rating, fieldId, userId, userEmail);
                 reviews.add(review);
             }
             while (cursor.moveToNext());
@@ -71,6 +75,7 @@ public class ReviewSql {
         values.put(REVIEW_RATING,review.getStars());
         values.put(REVIEW_FIELD_ID,review.getField_id());
         values.put(REVIEW_USER_ID,review.getUser_id());
+        values.put(REVIEW_USER_EMAIL,review.getUser_email());
         db.insertWithOnConflict(REVIEW_TABLE, REVIEW_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 

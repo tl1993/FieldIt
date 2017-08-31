@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class AddReviewFregment extends Fragment {
         if (getArguments() != null) {
             this.field_id = getArguments().getString("field_id");
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class AddReviewFregment extends Fragment {
         // Inflate the layout for this fragment
         View contentView = inflater.inflate(R.layout.fragment_add_review, container, false);
         // Get the image view of the view
-        imageView = (ImageView) contentView.findViewById(R.id.new_review_imageview);
+      //  imageView = (ImageView) contentView.findViewById(R.id.new_review_imageview);
         editText = (EditText) contentView.findViewById(R.id.new_review_text);
         ratingBar = (RatingBar) contentView.findViewById(R.id.new_review_rating);
         progressBar = (ProgressBar) contentView.findViewById(R.id.review_progressBar);
@@ -80,7 +82,7 @@ public class AddReviewFregment extends Fragment {
             @Override
             public void onClick(View v) {
                 String text = editText.getText().toString();
-                int rating = ratingBar.getNumStars();
+                float rating = ratingBar.getRating();
                progressBar.setVisibility(View.VISIBLE);
 
                 Model.getInstance().saveReview(field_id,text,rating,new Model.AddReviewListener() {

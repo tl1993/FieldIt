@@ -138,7 +138,7 @@ public class Model {
         }
     }
 
-    public void getAllUpdatedReviews(final GetReviewsListener listener, final String fieldId) {
+    public void getAllUpdatedReviews(final String fieldId, final GetReviewsListener listener) {
 
         if (checkNetwork()) {
 
@@ -404,11 +404,12 @@ public class Model {
         }
     }
 
-    public void saveReview(String field_id,String text,int rating,final AddReviewListener listener)
+    public void saveReview(String field_id,String text,float rating,final AddReviewListener listener)
     {
         String user_id = modelFirebase.getUser().getUid();
+        String user_email = modelFirebase.getUser().getEmail();
         String id = modelFirebase.getNewReviewKey();
-        final Review review = new Review(id,text,rating,field_id,user_id);
+        final Review review = new Review(id,text,rating,field_id,user_id,user_email);
         // Add field to Firebase
         modelFirebase.addReview(review, new AddReviewListener() {
             @Override

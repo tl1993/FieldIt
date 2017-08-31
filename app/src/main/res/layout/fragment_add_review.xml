@@ -10,14 +10,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/new_review_imageview"
             android:layout_width="400dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/field" />
+            android:src="@drawable/field" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_height="184dp"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ'קראטוןםפשדגכעיחלךףזסבהנמצתץ"
                 android:gravity="top"
-                android:hint="tell us what you think"
+                android:hint="Tell us what you think.."
                 android:inputType="text"
                 android:maxLines="20" />
         </LinearLayout>

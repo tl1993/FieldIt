@@ -312,6 +312,17 @@ public class FieldDetailsFragment extends Fragment {
             tran.replace(R.id.activity_field,addReviewFregment);
             tran.commit();
         }
+        else if(id == R.id.review_list_button)
+        {
+            ReviewListFragment reviewListFragment = ReviewListFragment.newInstance();
+            Bundle args = new Bundle();
+            args.putString("field_id", fieldId);
+            reviewListFragment.setArguments(args);
+            FragmentTransaction tran = getFragmentManager().beginTransaction();
+            tran.replace(R.id.activity_field,reviewListFragment);
+
+            tran.commit();
+        }
         else
         {
             return super.onOptionsItemSelected(item);

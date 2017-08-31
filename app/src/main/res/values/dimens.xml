@@ -5,4 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="logo_w_h">100dp</dimen>
 
+    <dimen name="reviews_list_row_top_margin">5dp</dimen>
+    <dimen name="reviews_list_row_bottom_margin">5dp</dimen>
+
 </resources>
