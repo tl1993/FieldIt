@@ -42,12 +42,12 @@ public class ModelSql {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-            // Drop both trips and last upadte time tables
+            // Drop fields, reviews and last upadte time tables
             ReviewSql.drop(db);
             FieldSql.drop(db);
             LastUpdateSql.drop(db);
 
-            // Recreate both trips and last upadte time tables
+            // Recreate fields, reviews and last upadte time tables
             onCreate(db);
         }
     }

@@ -3,7 +3,6 @@
     <string name="app_name">FieldIt</string>
     <string name="title_activity_maps">FieldIt</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="new_review_cancel_button">Cancel</string>
     <string name="new_review_save_button">Save</string>
     <string-array name="field_types">
@@ -34,6 +33,7 @@
     <string name="new_field_save_button">Save</string>
     <string name="field_details_delete_button">Delete</string>
     <string name="title_activity_field">FieldActivity</string>
+
     <!-- Messages -->
     <string name="no_field_has_changed">You need to change at least one field</string>
     <string name="must_fill_all_fields">You must fill all the fields in the form</string>
@@ -44,6 +44,7 @@
     <string name="Action_canceled">Action canceled</string>
     <string name="field_added_successfully">Field added successfully!</string>
     <string name="review_added_successfully">Review added successfully!</string>
+    <string name="fields_refreshed">All fields has been refreshed</string>
 
     <!--Login-->
     <string name="action_sign_in_short">Register</string>
@@ -84,7 +85,4 @@
 
     <string name="reviews_fetch_failed">An error occured while retrivieing reviews.</string>
     <string name="no_network">There is no internet connection, you can only watch the reviews list</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -61,6 +61,7 @@ public class Model {
 
         return isConnected;
     }
+
     public interface GetFieldsListener{
         public void onResult(List<Field> fields, List<Field> fieldsToDelete);
         public void onCancel();
@@ -309,10 +310,10 @@ public class Model {
         modelFirebase.fieldUpdateListener = lsn;
     }
 
-    public void setReviewUpdateListener(ReviewUpdateListener lsn)
-    {
+    public void setReviewUpdateListener(ReviewUpdateListener lsn) {
         modelFirebase.reviewUpdateListener = lsn;
     }
+
     public void deleteField(String id, final DeleteFieldListener listener){
 
         // Delete field from Firebase
@@ -417,12 +418,12 @@ public class Model {
         }
     }
 
-    public void saveReview(String field_id,String text,float rating,final AddReviewListener listener)
-    {
+    public void saveReview(String field_id,String text,float rating,final AddReviewListener listener) {
         String user_id = modelFirebase.getUser().getUid();
         String user_email = modelFirebase.getUser().getEmail();
         String id = modelFirebase.getNewReviewKey();
         final Review review = new Review(id,text,rating,field_id,user_id,user_email);
+
         // Add field to Firebase
         modelFirebase.addReview(review, new AddReviewListener() {
             @Override
@@ -488,7 +489,6 @@ public class Model {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri contentUri = Uri.fromFile(imageFile);
         mediaScanIntent.setData(contentUri);
-        //MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
     }
 
     private void refreshGallery(){

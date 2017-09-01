@@ -152,6 +152,7 @@ public class FieldSql {
         // Get the last update time
         return LastUpdateSql.getLastUpdate(db, FIELD_TABLE);
     }
+
     public static void setLastUpdateDate(SQLiteDatabase db, double date){
 
         // Set the last update time

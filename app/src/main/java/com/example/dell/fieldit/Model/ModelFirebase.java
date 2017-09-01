@@ -83,7 +83,7 @@ public class ModelFirebase {
         });
     }
 
-            public void getAllUpdatedReviews(double lastUpdateDate, final Model.GetReviewsListener listener) {
+    public void getAllUpdatedReviews(double lastUpdateDate, final Model.GetReviewsListener listener) {
 
                 // Get reference for the reviews node
                 DatabaseReference myRef = database.getReference("reviews");
@@ -98,7 +98,7 @@ public class ModelFirebase {
                         final List<Review> reviewsList = new LinkedList<Review>();
                         final List<Review> reviewsToDelete = new LinkedList<Review>();
 
-                        // Loop over all fetched fields
+                        // Loop over all fetched reviews
                         for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
 
                             // Create a review object for the current snapshot
@@ -107,8 +107,8 @@ public class ModelFirebase {
                             // Set the id of the current review
                             review.setId(reviewSnapshot.getKey());
 
-                            // If the field is no deleted - add it to the fields list
-                            // Otherwise - add it to the fields to delete list
+                            // If the review is no deleted - add it to the reviews list
+                            // Otherwise - add it to the reviews to delete list
                             if (!review.getIsDeleted()) {
                                 reviewsList.add(review);
                             } else {
@@ -127,6 +127,7 @@ public class ModelFirebase {
             }
         });
     }
+
     public void addField(Field field,final Model.AddFieldListener listener) {
         DatabaseReference myRef = database.getReference("fields");
         myRef.child(field.getId()).setValue(field.toMap(), new DatabaseReference.CompletionListener() {

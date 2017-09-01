@@ -29,8 +29,7 @@ public class Field {
 
     }
 
-    public Field(String name,String type,String latitude,String longitude,String description,boolean isLighted)
-    {
+    public Field(String name,String type,String latitude,String longitude,String description,boolean isLighted) {
         this.name = name;
         this.type = type;
         this.description=description;
@@ -39,8 +38,7 @@ public class Field {
         this.isLighted = isLighted;
     }
 
-    public Field(String id,String name,String type,String latitude,String longitude,String description,boolean isLighted)
-    {
+    public Field(String id,String name,String type,String latitude,String longitude,String description,boolean isLighted) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -49,6 +47,7 @@ public class Field {
         this.longitude = longitude;
         this.isLighted = isLighted;
     }
+
     // Getters
     public  String getId(){return this.id;}
     public  String getName() { return this.name;}
@@ -61,6 +60,7 @@ public class Field {
     public boolean getIslighted() { return this.isLighted;}
     public double getLastUpdated() { return this.lastUpdated;}
     public boolean getIsDeleted() {return this.isDeleted;}
+
     // Setters
     public void setId(String id) { this.id = id;}
     public void setName(String name) { this.name = name;}
@@ -71,7 +71,7 @@ public class Field {
     public void setImageName(String imageName){ this.imageName = imageName;}
     public void setLastUpdated(double lastUpdated) { this.lastUpdated = lastUpdated;}
     public void setIsDeleted(boolean isDeleted){ this.isDeleted = isDeleted;}
-        public void setUser_id(String userId) { this.user_id = userId;}
+    public void setUser_id(String userId) { this.user_id = userId;}
     public void setLighted(boolean isLighted){this.isLighted = isLighted;}
 
      public Map<String, Object> toMap() {

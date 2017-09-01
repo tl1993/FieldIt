@@ -1,19 +1,12 @@
 package com.example.dell.fieldit;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -37,41 +30,32 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
     }
 
     @Override
-    public void onReviewChange()
-    {
-        // Get all trips from databases
+    public void onReviewChange() {
+        // Get all reviews from databases
         Model.getInstance().getAllUpdatedReviews(this.field_id,new Model.GetReviewsListener() {
             @Override
             public void onResult(List<Review> reviews, List<Review> reviewsToDelete) {
 
 
-                // Set the trips list and refresh the displayed list
+                // Set the reviews list and refresh the displayed list
                 reviewsList = reviews;
                 adapter.notifyDataSetChanged();
 
                 if (!Model.checkNetwork()) {
-                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onCancel() {
                 // Show relevant message
-                Toast.makeText(getActivity(), getString(R.string.reviews_fetch_failed), Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), getString(R.string.reviews_fetch_failed), Toast.LENGTH_LONG).show();
             }
         });
-    }
-    public void setTripsList(List<Review> reviews) {
-        reviewsList = reviews;
     }
 
     public ListView getList() {
         return list;
     }
-
-    public ReviewsAdapter getAdapter() {
-        return adapter;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +66,7 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         Model.getInstance().setReviewUpdateListener(this);
     }
+
     public static ReviewListFragment newInstance() {
         ReviewListFragment fragment = new ReviewListFragment();
         Bundle args = new Bundle();
@@ -104,7 +89,7 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
         adapter = new ReviewsAdapter();
         list.setAdapter(adapter);
 
-        // Get all trips from databases
+        // Get all reviews from databases
         Model.getInstance().getAllUpdatedReviews(this.field_id,new Model.GetReviewsListener() {
             @Override
             public void onResult(List<Review> reviews, List<Review> reviewsToDelete) {
@@ -112,12 +97,12 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 // Hide progress bar
                 progressBar.setVisibility(View.GONE);
 
-                // Set the trips list and refresh the displayed list
+                // Set the reviews list and refresh the displayed list
                 reviewsList = reviews;
                 adapter.notifyDataSetChanged();
 
                 if (!Model.checkNetwork()) {
-                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -127,7 +112,7 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 progressBar.setVisibility(View.GONE);
 
                 // Show relevant message
-                Toast.makeText(getActivity(), getString(R.string.reviews_fetch_failed), Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), getString(R.string.reviews_fetch_failed), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -163,7 +148,6 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
 
         @Override
         public int getItemViewType(int position) {
-
             return position;
         }
 
@@ -176,10 +160,10 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 view = getActivity().getLayoutInflater().inflate(R.layout.fragment_review_list_row, null);
             }
 
-            // Get all the details of the required trip
+            // Get all the details of the required review
             final Review review = reviewsList.get(i);
 
-            // Set the trip name in the relevant field in the view
+            // Set the review name in the relevant field in the view
             TextView nameTv = (TextView) view.findViewById(R.id.reviewUserID);
             nameTv.setText(review.getUser_email());
             TextView TextTv = (TextView) view.findViewById(R.id.reviewText);
@@ -197,5 +181,6 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
     {
         super.onStop();
         Model.getInstance().setReviewUpdateListener(null);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }

@@ -19,8 +19,7 @@ public class Review {
     private boolean isDeleted;
     private double lastUpdated;
 
-    public Review(String id,String text, float stars,String field_id,String user_id, String user_email)
-    {
+    public Review(String id,String text, float stars,String field_id,String user_id, String user_email) {
         this.id = id;
         this.text = text;
         this.stars = stars;
@@ -29,8 +28,7 @@ public class Review {
         this.user_email = user_email;
     }
 
-    public Review()
-    {
+    public Review() {
 
     }
 

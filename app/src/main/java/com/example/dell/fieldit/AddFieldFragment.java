@@ -1,18 +1,13 @@
 package com.example.dell.fieldit;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +18,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import static android.R.attr.imeSubtypeLocale;
-import static android.R.attr.type;
-
 public class AddFieldFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     static final int TAKING_IMAGE = 1;
     ImageView imageView = null;
     Bitmap imageBitmap = null;
@@ -47,9 +37,6 @@ public class AddFieldFragment extends Fragment {
     Spinner spinner;
     String latitudeArg;
     String longitudeArg;
-    //ProgressBar progressBar;
-
-    //private OnFragmentInteractionListener mListener;
 
     public AddFieldFragment() {
         // Required empty public constructor
@@ -85,12 +72,6 @@ public class AddFieldFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        String name;
-        Boolean isLighted;
-        String type;
-        String longitude;
-        String latitude;
-        String description;
 
         // Inflate the layout for this fragment
         View contentView = inflater.inflate(R.layout.fragment_add_field, container, false);
@@ -226,34 +207,16 @@ public class AddFieldFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
     }
-
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 
     private void showMessage(int messageCode, Boolean shouldExit) {
         String message = getResources().getString(messageCode);

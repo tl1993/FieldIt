@@ -56,7 +56,6 @@ public class FieldActivity extends AppCompatActivity {
                 getMenuInflater().inflate(R.menu.activity_field_details_menu,menu);
                 break;
         }
-        //getMenuInflater().inflate(R.menu.activity_main_menu,menu);
         return true;
     }
 

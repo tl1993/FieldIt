@@ -23,19 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
 
-import org.w3c.dom.Text;
-
-
 public class FieldDetailsFragment extends Fragment {
 
-
-    // private OnFragmentInteractionListener mListener;
     private Boolean isEditMode = false;
     private String fieldId;
     Boolean imageChanged = false;
@@ -106,7 +99,7 @@ public class FieldDetailsFragment extends Fragment {
 
         if (fd.getImageName() != null) {
 
-            // Load the trip's image
+            // Load the field's image
             Model.getInstance().loadImage(fd.getImageName(), new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap imagebtmp) {
@@ -249,23 +242,11 @@ public class FieldDetailsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        // mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private void setTypesDropDown( final View view) {
@@ -299,32 +280,29 @@ public class FieldDetailsFragment extends Fragment {
                 isEditMode = false;
                 disableButtons();
                 cancelChanges();
-                //showMessage(R.string.Action_canceled, false);
             }
         }
-        else if(id == R.id.add_review_button)
-        {
+        else if(id == R.id.add_review_button) {
             AddReviewFregment addReviewFregment = AddReviewFregment.newInstance();
             Bundle args = new Bundle();
             args.putString("field_id", fieldId);
             addReviewFregment.setArguments(args);
             FragmentTransaction tran = getFragmentManager().beginTransaction();
             tran.replace(R.id.activity_field,addReviewFregment);
+            tran.addToBackStack(null);
             tran.commit();
         }
-        else if(id == R.id.review_list_button)
-        {
+        else if(id == R.id.review_list_button) {
             ReviewListFragment reviewListFragment = ReviewListFragment.newInstance();
             Bundle args = new Bundle();
             args.putString("field_id", fieldId);
             reviewListFragment.setArguments(args);
             FragmentTransaction tran = getFragmentManager().beginTransaction();
             tran.replace(R.id.activity_field,reviewListFragment);
-
+            tran.addToBackStack(null);
             tran.commit();
         }
-        else
-        {
+        else {
             return super.onOptionsItemSelected(item);
         }
         return true;

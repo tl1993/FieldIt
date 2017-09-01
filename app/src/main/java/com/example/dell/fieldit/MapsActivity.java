@@ -1,31 +1,20 @@
 package com.example.dell.fieldit;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
-import com.example.dell.fieldit.Model.ModelFirebase;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,8 +28,6 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,GoogleMap.OnMapLongClickListener,FieldUpdateListener
 {
     public static final int ADD_FRAGMENT = 1;
-    // public static final int REFRESH_FRAGMENT = 2;
-    // public static final int LOGOUT_FRAGMENT = 3;
     public static final int DETAILS_FRAGMENT = 3;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
@@ -52,7 +39,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onFieldChange() {
         Model.getInstance().getAllUpdatedFields(new Model.GetFieldsListener() {
             @Override
-            public void onResult(List<Field> fields, List<Field> tripsToDelete) {
+            public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
                 mMap.clear();
                 List<Field> data = fields;
                 for(Field field : data) {
@@ -63,7 +50,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .snippet("For more info click here"));
                     m.setTag(field.getId());
                 }
-                //mMap.setOnInfoWindowClickListener(this);
             }
             @Override
             public void onCancel() {
@@ -118,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Model.getInstance().getAllUpdatedFields(new Model.GetFieldsListener() {
             @Override
-            public void onResult(List<Field> fields, List<Field> tripsToDelete) {
+            public void onResult(List<Field> fields, List<Field> fieldsToDelete) {
                 List<Field> data = fields;
                 for(Field field : data) {
                     LatLng position = new LatLng(Double.parseDouble(field.getLatitude()), Double.parseDouble(field.getLongitude()));
@@ -128,7 +114,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .snippet("For more info click here"));
                     m.setTag(field.getId());
                 }
-                //mMap.setOnInfoWindowClickListener(this);
             }
             @Override
             public void onCancel() {
@@ -146,13 +131,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        Toast.makeText(this, "Info window clicked",
-//                Toast.LENGTH_SHORT).show();
         Intent DetailsIntent = new Intent(this, FieldActivity.class);
         DetailsIntent.putExtra("frgToLoad", DETAILS_FRAGMENT);
         DetailsIntent.putExtra("id", marker.getTag().toString());
 
-        //startActivity(DetailsIntent);
         startActivityForResult(DetailsIntent, DETAILS_FRAGMENT);
     }
 
@@ -250,45 +232,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.refresh_button){
-//            getFragmentManager().popBackStack();
-//        }
-//        else if (id == R.id.main_add) {
-//            Fragment newFragment = new AddFieldFragment();
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//            // Replace whatever is in the fragment_container view with this fragment,
-//            // and add the transaction to the back stack
-//            transaction.replace(R.id.main_container , newFragment);
-//            transaction.addToBackStack(null);
-//
-//            // Commit the transaction
-//            transaction.commit();
-//        }
-//        else
-//        {
-//            return super.onOptionsItemSelected(item);
-//        }
-//        return true;
 
         // Handle menu action according to item id
         switch (item.getItemId()) {
 
-            // Handle click on new trip button
+            // Handle click on new field button
             case R.id.add_field_button:
-
-                // Start the Add Field 9Fragment
-//                Fragment newFragment = new AddFieldFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//                // Replace whatever is in the fragment_container view with this fragment,
-//                // and add the transaction to the back stack
-//                transaction.replace(R.id.map , newFragment);
-//                transaction.addToBackStack(null);
-//
-//                // Commit the transaction
-//                transaction.commit();
 
                 Intent AddIntent = new Intent(this, FieldActivity.class);
                 AddIntent.putExtra("frgToLoad", ADD_FRAGMENT);
@@ -300,16 +249,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Handle click on refresh button
             case R.id.refresh_button:
 
-                // Refresh the trips list
-                //Model.getInstance().refreshFieldsList();
+                // Refresh the fields list
                 refreshMapObjects();
+                Toast.makeText(this, R.string.fields_refreshed, Toast.LENGTH_LONG).show();
                 return true;
 
             // If user chose to sign out
             case R.id.signout_button:
                 // Sign out using firebase api
                 auth.signOut();
-
                 return true;
         }
         return false;

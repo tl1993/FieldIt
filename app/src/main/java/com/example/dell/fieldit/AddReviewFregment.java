@@ -3,7 +3,6 @@ package com.example.dell.fieldit;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,15 +26,10 @@ import com.example.dell.fieldit.Model.Model;
  */
 public class AddReviewFregment extends Fragment {
 
-
-    // TODO: Rename and change types of parameters
-    ImageView imageView = null;
-    Bitmap imageBitmap = null;
     EditText editText;
     RatingBar ratingBar;
     String field_id;
     ProgressBar progressBar;
-    //private OnFragmentInteractionListener mListener;
 
     public AddReviewFregment() {
         // Required empty public constructor
@@ -70,8 +63,6 @@ public class AddReviewFregment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View contentView = inflater.inflate(R.layout.fragment_add_review, container, false);
-        // Get the image view of the view
-      //  imageView = (ImageView) contentView.findViewById(R.id.new_review_imageview);
         editText = (EditText) contentView.findViewById(R.id.new_review_text);
         ratingBar = (RatingBar) contentView.findViewById(R.id.new_review_rating);
         progressBar = (ProgressBar) contentView.findViewById(R.id.review_progressBar);
@@ -127,21 +118,13 @@ public class AddReviewFregment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
 }
