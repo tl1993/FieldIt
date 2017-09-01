@@ -88,14 +88,13 @@ public class AddReviewFregment extends Fragment {
                         showMessage(R.string.save_error);
                     }
                 });
-                //TODO replace transaction
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                //TODO replace transaction
+                getActivity().getFragmentManager().popBackStack();
             }
         });
 
