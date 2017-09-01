@@ -4,17 +4,17 @@
 
     <item android:id="@+id/add_review_button"
         android:title="@string/field_details_add_review"
-        android:icon="@drawable/ic_grade_black_24dp"
+        android:icon="@drawable/ic_grade_white_24dp"
         compat:showAsAction="ifRoom"/>
 
     <item android:id="@+id/review_list_button"
         android:title="@string/field_details_review_list"
-        android:icon="@drawable/ic_thumbs_up_down_black_24dp"
+        android:icon="@drawable/ic_thumbs_up_down_white_24dp"
         compat:showAsAction="ifRoom"/>
 
     <item android:id="@+id/edit_field_button"
         android:title="@string/field_details_edit_button"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_mode_edit_white_24dp"
         compat:showAsAction="ifRoom"/>
 
 </menu>

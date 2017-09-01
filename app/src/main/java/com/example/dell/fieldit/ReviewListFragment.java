@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.FragmentTransaction;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -100,6 +101,17 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 // Set the reviews list and refresh the displayed list
                 reviewsList = reviews;
                 adapter.notifyDataSetChanged();
+                if (reviewsList.isEmpty())
+                {
+                    ReviewsEmptyFragment reviewEmptyFragment = ReviewsEmptyFragment.newInstance();
+                    Bundle args = new Bundle();
+                    reviewEmptyFragment.setArguments(args);
+                    FragmentTransaction tran = getFragmentManager().beginTransaction();
+                    tran.replace(R.id.activity_field,reviewEmptyFragment);
+
+                    tran.commit();
+
+                }
 
                 if (!Model.checkNetwork()) {
                     Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG).show();
