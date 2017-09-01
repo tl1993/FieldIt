@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 
 import com.example.dell.fieldit.FieldUpdateListener;
 import com.example.dell.fieldit.MapsActivity;
+import com.example.dell.fieldit.ReviewUpdateListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ import java.util.Map;
 public class ModelFirebase {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     FieldUpdateListener fieldUpdateListener;
+    ReviewUpdateListener reviewUpdateListener;
 
     public void getAllUpdatedFields(double lastUpdateDate, final Model.GetFieldsListener listener) {
 
@@ -382,6 +384,61 @@ public class ModelFirebase {
                     }
 
                 }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // For future features
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                // For future features
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // For future features
+            }
+        });
+    }
+
+    public void handleReviewDatabaseChanges() {
+
+        // Register for any change within the fields node
+        database.getReference("reviews").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+
+                // Create a field object for the current snapshot
+                Review review = dataSnapshot.getValue(Review.class);
+
+                // Set the id of the current field
+                review.setId(dataSnapshot.getKey());
+
+                // If the field isn't deleted
+                if (!review.getIsDeleted()) {
+
+                    // If the review not exists in the local database
+                    if (Model.getInstance().getReviewById(review.getId()) == null) {
+
+                        // Get the current user and check if it is different than the user that created the field
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (!user.getUid().equals(review.getUser_id())) {
+                            if(reviewUpdateListener!= null) {
+                                reviewUpdateListener.onReviewChange();
+                            }
+                        }
+                    }
+
+                    // Add the review to the local database
+                    ReviewSql.addReview(Model.getInstance().modelSql.getWritableDB(), review);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                //For future features , right now reviews are not changed or deleted
             }
 
             @Override

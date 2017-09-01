@@ -3,6 +3,7 @@ package com.example.dell.fieldit;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -25,7 +26,7 @@ import com.example.dell.fieldit.Model.Model;
 import com.example.dell.fieldit.Model.Review;
 
 
-public class ReviewListFragment extends Fragment {
+public class ReviewListFragment extends Fragment implements ReviewUpdateListener {
     List<Review> reviewsList = new LinkedList<>();
     ListView list;
     ReviewsAdapter adapter;
@@ -35,6 +36,30 @@ public class ReviewListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onReviewChange()
+    {
+        // Get all trips from databases
+        Model.getInstance().getAllUpdatedReviews(this.field_id,new Model.GetReviewsListener() {
+            @Override
+            public void onResult(List<Review> reviews, List<Review> reviewsToDelete) {
+
+
+                // Set the trips list and refresh the displayed list
+                reviewsList = reviews;
+                adapter.notifyDataSetChanged();
+
+                if (!Model.checkNetwork()) {
+                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG);
+                }
+            }
+            @Override
+            public void onCancel() {
+                // Show relevant message
+                Toast.makeText(getActivity(), getString(R.string.reviews_fetch_failed), Toast.LENGTH_LONG);
+            }
+        });
+    }
     public void setTripsList(List<Review> reviews) {
         reviewsList = reviews;
     }
@@ -55,6 +80,7 @@ public class ReviewListFragment extends Fragment {
             this.field_id = getArguments().getString("field_id");
         }
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        Model.getInstance().setReviewUpdateListener(this);
     }
     public static ReviewListFragment newInstance() {
         ReviewListFragment fragment = new ReviewListFragment();
@@ -164,5 +190,12 @@ public class ReviewListFragment extends Fragment {
             // Inflate the layout for this view
             return view;
         }
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        Model.getInstance().setReviewUpdateListener(null);
     }
 }

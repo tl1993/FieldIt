@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 
 import com.example.dell.fieldit.FieldUpdateListener;
 import com.example.dell.fieldit.MyApplication;
+import com.example.dell.fieldit.ReviewUpdateListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +40,7 @@ public class Model {
 
         // Register for data changes in Firebase in order to implement real-time change support
         modelFirebase.handleDatabaseChanges();
+        modelFirebase.handleReviewDatabaseChanges();
 
         // Init local database model
         modelSql = new ModelSql(MyApplication.getAppContext());
@@ -217,6 +219,13 @@ public class Model {
         return FieldSql.getFieldById(modelSql.getReadbleDB(), id);
     }
 
+    public Review getReviewById(String id){
+
+        // Return the review by the required id if it exists
+        // Otherwise - return null
+        return ReviewSql.getReviewById(modelSql.getReadbleDB(), id);
+    }
+
     public interface AddFieldListener{
         public void onResult();
         public void onCancel();
@@ -300,6 +309,10 @@ public class Model {
         modelFirebase.fieldUpdateListener = lsn;
     }
 
+    public void setReviewUpdateListener(ReviewUpdateListener lsn)
+    {
+        modelFirebase.reviewUpdateListener = lsn;
+    }
     public void deleteField(String id, final DeleteFieldListener listener){
 
         // Delete field from Firebase

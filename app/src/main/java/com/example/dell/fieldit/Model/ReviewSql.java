@@ -67,6 +67,34 @@ public class ReviewSql {
         return reviews;
     }
 
+        public static Review getReviewById(SQLiteDatabase db,String id)
+    {
+        String where = REVIEW_ID + " = ?";
+        String[] args = {id};
+        Cursor cursor = db.query(REVIEW_TABLE, null, where, args, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(REVIEW_ID);
+            int textIndex = cursor.getColumnIndex(REVIEW_TEXT);
+            int ratingIndex = cursor.getColumnIndex(REVIEW_RATING);
+            int fieldIdIndex = cursor.getColumnIndex(REVIEW_FIELD_ID);
+            int userIdIndex = cursor.getColumnIndex(REVIEW_USER_ID);
+            int userEmailIndex = cursor.getColumnIndex(REVIEW_USER_EMAIL);
+            String reviewId = cursor.getString(idIndex);
+            String text = cursor.getString(textIndex);
+            float rating = cursor.getFloat(ratingIndex);
+            String fieldId = cursor.getString(fieldIdIndex);
+            String userId = cursor.getString(userIdIndex);
+            String userEmail = cursor.getString(userEmailIndex);
+            Review review = new Review(reviewId, text, rating, fieldId, userId, userEmail);
+            return review;
+
+        }
+        return null;
+
+
+    }
+
     public static void addReview(SQLiteDatabase db, Review review) {
         // Add review to reviews table
         ContentValues values = new ContentValues();
