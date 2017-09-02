@@ -101,9 +101,9 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 progressBar.setVisibility(View.GONE);
 
                 // Set the reviews list and refresh the displayed list
-                reviewsList = reviews;
-                adapter.notifyDataSetChanged();
-                if (reviewsList.isEmpty()) {
+//                reviewsList = reviews;
+//                adapter.notifyDataSetChanged();
+                if (reviews.isEmpty()) {
                     list.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);
 
