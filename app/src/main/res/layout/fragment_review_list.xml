@@ -14,6 +14,14 @@
     <ListView
         android:id="@+id/reviewsListListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/emptyListTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="There are no reviews for this field at the moment."
+        android:visibility="gone"/>
 
 </FrameLayout>

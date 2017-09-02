@@ -24,6 +24,7 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
     List<Review> reviewsList = new LinkedList<>();
     ListView list;
     ReviewsAdapter adapter;
+    TextView textView;
     String field_id;
 
     public ReviewListFragment() {
@@ -86,6 +87,7 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.reviewsListProgressBar);
         progressBar.setVisibility(View.VISIBLE);
 
+        textView = (TextView) view.findViewById(R.id.emptyListTextView);
         list = (ListView) view.findViewById(R.id.reviewsListListView);
         adapter = new ReviewsAdapter();
         list.setAdapter(adapter);
@@ -101,16 +103,16 @@ public class ReviewListFragment extends Fragment implements ReviewUpdateListener
                 // Set the reviews list and refresh the displayed list
                 reviewsList = reviews;
                 adapter.notifyDataSetChanged();
-                if (reviewsList.isEmpty())
-                {
-                    ReviewsEmptyFragment reviewEmptyFragment = ReviewsEmptyFragment.newInstance();
-                    Bundle args = new Bundle();
-                    reviewEmptyFragment.setArguments(args);
-                    FragmentTransaction tran = getFragmentManager().beginTransaction();
-                    tran.replace(R.id.activity_field,reviewEmptyFragment);
+                if (reviewsList.isEmpty()) {
+                    list.setVisibility(View.GONE);
+                    textView.setVisibility(View.VISIBLE);
 
-                    tran.commit();
-
+                } else {
+                    // Set the reviews list and refresh the displayed list
+                    reviewsList = reviews;
+                    adapter.notifyDataSetChanged();
+                    list.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.GONE);
                 }
 
                 if (!Model.checkNetwork()) {
