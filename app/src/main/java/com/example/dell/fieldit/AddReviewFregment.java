@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Model;
 
@@ -75,19 +76,23 @@ public class AddReviewFregment extends Fragment {
                 String text = editText.getText().toString();
                 float rating = ratingBar.getRating();
                progressBar.setVisibility(View.VISIBLE);
+                if (Model.checkNetwork()) {
+                    Model.getInstance().saveReview(field_id, text, rating, new Model.AddReviewListener() {
+                        @Override
+                        public void onResult() {
+                            progressBar.setVisibility(View.GONE);
+                            showMessage(R.string.review_added_successfully);
+                        }
 
-                Model.getInstance().saveReview(field_id,text,rating,new Model.AddReviewListener() {
-                    @Override
-                    public void onResult() {
-                        progressBar.setVisibility(View.GONE);
-                        showMessage(R.string.review_added_successfully);
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        showMessage(R.string.save_error);
-                    }
-                });
+                        @Override
+                        public void onCancel() {
+                            showMessage(R.string.save_error);
+                        }
+                    });
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {

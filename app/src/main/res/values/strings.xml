@@ -45,6 +45,7 @@
     <string name="field_added_successfully">Field added successfully!</string>
     <string name="review_added_successfully">Review added successfully!</string>
     <string name="fields_refreshed">All fields has been refreshed</string>
+    <string name="no_connection">There is no connection! Cannot perform this action</string>
 
     <!--Login-->
     <string name="action_sign_in_short">Register</string>

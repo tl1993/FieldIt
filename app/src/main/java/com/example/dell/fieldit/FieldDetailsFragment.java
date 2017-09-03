@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
@@ -137,49 +138,54 @@ public class FieldDetailsFragment extends Fragment {
                 description = descriptionEt.getText().toString();
                 isLighted = isLightedCb.isChecked();
 
-                // Check validation of fields
-                if(!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
-                        && !type.trim().isEmpty() && !description.trim().isEmpty()) {
+                if (Model.checkNetwork()) {
+                    // Check validation of fields
+                    if (!name.trim().isEmpty() && !longitude.trim().isEmpty() && !latitude.trim().isEmpty()
+                            && !type.trim().isEmpty() && !description.trim().isEmpty()) {
 
-                    // Check if at least one field has changed
-                    if (!name.equals(fd.getName()) || !longitude.equals(fd.getLongitude()) || !latitude.equals(fd.getLatitude())
-                            || !type.equals(fd.getType()) || !description.equals(fd.getDescription())
-                            || !isLighted.equals(fd.getIslighted()) || imageChanged == true) {
+                        // Check if at least one field has changed
+                        if (!name.equals(fd.getName()) || !longitude.equals(fd.getLongitude()) || !latitude.equals(fd.getLatitude())
+                                || !type.equals(fd.getType()) || !description.equals(fd.getDescription())
+                                || !isLighted.equals(fd.getIslighted()) || imageChanged == true) {
 
-                        final Field editedField = new Field(name,type,latitude,longitude,description,isLighted);
-                        editedField.setId(fd.getId());
-                        editedField.setImageName(fd.getImageName());
-                        progressBar.setVisibility(View.VISIBLE);
+                            final Field editedField = new Field(name, type, latitude, longitude, description, isLighted);
+                            editedField.setId(fd.getId());
+                            editedField.setImageName(fd.getImageName());
+                            progressBar.setVisibility(View.VISIBLE);
 
-                        Model.getInstance().editField(editedField,imageBitmap,new Model.EditFieldListener() {
-                            @Override
-                            public void onResult() {
+                            Model.getInstance().editField(editedField, imageBitmap, new Model.EditFieldListener() {
+                                @Override
+                                public void onResult() {
 
-                                progressBar.setVisibility(View.GONE);
+                                    progressBar.setVisibility(View.GONE);
 
-                                // Show relevant message
-                                showMessage(R.string.save_successfully, false);
-                                fd = editedField;
-                                exitEditMode();
-                                getActivity().setResult(Activity.RESULT_OK);
-                            }
+                                    // Show relevant message
+                                    showMessage(R.string.save_successfully, false);
+                                    fd = editedField;
+                                    exitEditMode();
+                                    getActivity().setResult(Activity.RESULT_OK);
+                                }
 
-                            @Override
-                            public void onCancel() {
+                                @Override
+                                public void onCancel() {
 
-                                // Show relevant message
-                                showMessage(R.string.save_error, false);
-                            }
-                        });
+                                    // Show relevant message
+                                    showMessage(R.string.save_error, false);
+                                }
+                            });
 
+                        } else {
+                            Log.d("TAG", "onClick: Nothing has changed");
+                            showMessage(R.string.no_field_has_changed, false);
+                        }
                     } else {
-                        Log.d("TAG", "onClick: Nothing has changed");
-                        showMessage(R.string.no_field_has_changed, false);
+                        // Show relevant message
+                        Log.d("TAG", "onClick: Field is empty");
+                        showMessage(R.string.must_fill_all_fields, false);
                     }
                 } else {
-                    // Show relevant message
-                    Log.d("TAG", "onClick: Field is empty");
-                    showMessage(R.string.must_fill_all_fields, false);
+                    Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -188,23 +194,28 @@ public class FieldDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                Model.getInstance().deleteField(fd.getId(),new Model.DeleteFieldListener() {
-                    @Override
-                    public void onResult(String id) {
-                        progressBar.setVisibility(View.GONE);
-                        showMessage(R.string.delete_successfully, true);
-                        exitEditMode();
-                        getActivity().setResult(Activity.RESULT_OK);
-                    }
+                if (Model.checkNetwork()) {
+                    Model.getInstance().deleteField(fd.getId(),new Model.DeleteFieldListener() {
+                        @Override
+                        public void onResult(String id) {
+                            progressBar.setVisibility(View.GONE);
+                            showMessage(R.string.delete_successfully, true);
+                            exitEditMode();
+                            getActivity().setResult(Activity.RESULT_OK);
+                        }
 
-                    @Override
-                    public void onCancel() {
+                        @Override
+                        public void onCancel() {
 
-                        // Show relevant message
-                        showMessage(R.string.delete_error, false);
-                    }
+                            // Show relevant message
+                            showMessage(R.string.delete_error, false);
+                        }
 
-                });
+                    });
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
 

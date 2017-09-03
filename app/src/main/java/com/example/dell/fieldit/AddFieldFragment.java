@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.dell.fieldit.Model.Field;
 import com.example.dell.fieldit.Model.Model;
@@ -66,6 +68,7 @@ public class AddFieldFragment extends Fragment {
             latitudeArg = getArguments().getString("latitude");
             longitudeArg = getArguments().getString("longitude");
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
     }
 
@@ -132,20 +135,24 @@ public class AddFieldFragment extends Fragment {
                         newField.setUser_id(user.getUid());
 
                         progressBar.setVisibility(View.VISIBLE);
+                        if (Model.checkNetwork()) {
+                            Model.getInstance().addField(newField, imageBitmap, new Model.AddFieldListener() {
+                                @Override
+                                public void onResult() {
+                                    progressBar.setVisibility(View.GONE);
+                                    showMessage(R.string.field_added_successfully, true);
+                                    getActivity().setResult(Activity.RESULT_OK);
+                                }
 
-                        Model.getInstance().addField(newField,imageBitmap,new Model.AddFieldListener() {
-                            @Override
-                            public void onResult() {
-                                progressBar.setVisibility(View.GONE);
-                                showMessage(R.string.field_added_successfully, true);
-                                getActivity().setResult(Activity.RESULT_OK);
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                showMessage(R.string.save_error, false);
-                            }
-                        });
+                                @Override
+                                public void onCancel() {
+                                    showMessage(R.string.save_error, false);
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.no_connection), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                        }
                 } else {
                     // Show relevant message
                     showMessage(R.string.must_fill_all_fields, false);
@@ -226,5 +233,11 @@ public class AddFieldFragment extends Fragment {
         args.putBoolean("shouldExit",shouldExit);
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), "TAG");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }
